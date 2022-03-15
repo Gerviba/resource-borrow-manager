@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div class="content">
+        <form action="#" th:action="@{/search}" method="get">
+            <input id="query" type="text" name="q" th:value="${query}" />
+        </form>
+
+        <div th:each="obj : ${results}" th:object="${obj}">
+            <h4 th:text="${obj.name}"></h4>
+        </div>
+    </div>
+</body>
+</html>

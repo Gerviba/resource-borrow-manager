@@ -1,5 +1,10 @@
 package hu.gerviba.borrower.model
 
+import org.hibernate.search.mapper.pojo.automaticindexing.ReindexOnUpdate
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexingDependency
 import javax.persistence.*
 
 @Entity
@@ -8,6 +13,7 @@ import javax.persistence.*
 ],  uniqueConstraints = [
     UniqueConstraint(name = "uc_resourceentity_code", columnNames = ["code"])
 ])
+@Indexed
 data class ResourceEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -17,6 +23,7 @@ data class ResourceEntity(
     @Column(nullable = false, unique = true)
     var code: String = "",
 
+    @FullTextField
     @Column(nullable = false)
     var name: String = "",
 
@@ -35,15 +42,9 @@ data class ResourceEntity(
 
     @ManyToOne
     @JoinColumn
+    @IndexedEmbedded
+    @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)
     var ownerGroup: GroupEntity? = null,
-
-    @ManyToMany
-    @JoinTable
-    var maintainerDivisions: MutableSet<DivisionEntity> = mutableSetOf(),
-
-    @OneToMany
-    @JoinTable
-    var bookings: MutableList<BookingEntity> = mutableListOf(),
 
     @Column(nullable = false, updatable = false)
     var created: Long = 0,
@@ -54,4 +55,14 @@ data class ResourceEntity(
     @Column(nullable = false)
     var lastChecked: Long = 0
 
-)
+) {
+    @ManyToMany
+    @JoinTable
+    @IndexedEmbedded
+    @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)
+    open var maintainerDivisions: MutableSet<DivisionEntity> = mutableSetOf()
+
+    @OneToMany
+    @JoinTable
+    open var bookings: MutableList<BookingEntity> = mutableListOf()
+}

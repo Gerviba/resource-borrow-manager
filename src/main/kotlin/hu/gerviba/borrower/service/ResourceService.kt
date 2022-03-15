@@ -55,7 +55,7 @@ open class ResourceService(
     @Throws(EntityNotFoundException::class)
     @Transactional(readOnly = true, isolation = Isolation.READ_UNCOMMITTED)
     open fun getResource(resourceId: Int): ResourceEntity {
-        return resourceRepository.getById(resourceId).copy(maintainerDivisions = mutableSetOf())
+        return resourceRepository.getById(resourceId).copy()
     }
 
     @Throws(EntityNotFoundException::class)
