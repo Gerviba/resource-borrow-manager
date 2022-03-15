@@ -1,0 +1,27 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="hu">
+<head th:replace="Layout :: head">
+    <meta charset="UTF-8">
+    <title>Will be replaced</title>
+</head>
+<body>
+    <div class="content">
+        <h2>Show divisions</h2>
+        <table>
+            <tr>
+                <th>Division</th>
+                <th>...</th>
+            </tr>
+            <tr class="group" th:each="division : ${divisions}" th:object="${division}">
+                <td th:text="*{name}">division name</td>
+                <td>
+                    <a href="#" th:href="|@{/admin/group/}${groupId}/division/*{id}/members|">members</a>
+                    <a href="#" th:href="|@{/admin/group/}${groupId}/division/*{id}/edit|">edit</a>
+                    <a href="#" th:href="|@{/division/}*{id}|">open</a>
+                </td>
+            </tr>
+        </table>
+        <a href="#" th:href="|@{/admin/group/}${groupId}/division|">new division</a>
+    </div>
+</body>
+</html>

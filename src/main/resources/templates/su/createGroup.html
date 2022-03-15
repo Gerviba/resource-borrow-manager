@@ -1,0 +1,28 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="hu">
+<head th:replace="Layout :: head">
+    <meta charset="UTF-8">
+    <title>Will be replaced</title>
+</head>
+<body>
+    <div class="content">
+        <h2>New group</h2>
+        <form action="#" th:action="@{/su/group}" method="post" th:object="${newGroup}">
+            <label for="name">Name</label>
+            <input id="name" type="text" th:field="*{name}" /><br />
+
+            <label for="website">Website</label>
+            <input id="website" type="text" th:field="*{website}" /><br />
+
+            <label for="name">Introduction</label>
+            <textarea id="introduction" th:field="*{introduction}"></textarea><br />
+
+            <label for="visible">Visibility</label>
+            <input id="visible" type="checkbox" th:field="*{visible}" /><br />
+
+            <input type="submit" />
+        </form>
+
+    </div>
+</body>
+</html>

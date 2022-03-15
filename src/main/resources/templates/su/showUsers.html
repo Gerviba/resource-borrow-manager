@@ -1,0 +1,25 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="hu">
+<head th:replace="Layout :: head">
+    <meta charset="UTF-8">
+    <title>Will be replaced</title>
+</head>
+<body>
+    <div class="content">
+        <h2>Show users</h2>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>...</th>
+            </tr>
+            <tr class="group" th:each="user : ${users}" th:object="${user}">
+                <td th:text="*{name}">user name</td>
+                <td>
+                    <a href="#" th:href="|@{/su/user/}*{id}|">edit</a>
+                    <a href="#" th:href="|@{/user/}*{id}|">profile</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

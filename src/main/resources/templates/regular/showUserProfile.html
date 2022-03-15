@@ -1,0 +1,37 @@
+<!doctype html>
+<!--suppress HtmlRequiredTitleElement -->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="hu">
+<head th:replace="Layout :: head">
+</head>
+<body>
+    <div class="content" th:object="${user}">
+        <h2 th:text="*{name}">User Name</h2>
+
+        <table>
+            <tr>
+                <td>email</td>
+                <td th:text="*{email}"></td>
+            </tr>
+            <tr>
+                <td>teams</td>
+                <td th:text="*{teams}"></td>
+            </tr>
+            <tr>
+                <td>room</td>
+                <td th:text="*{room}"></td>
+            </tr>
+            <tr>
+                <td>mobile</td>
+                <td th:text="*{mobile}"></td>
+            </tr>
+            <tr>
+                <td>groups</td>
+                <td>
+                    <div th:each="group : *{groups}" th:text="${group.name}"></div>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+</body>
+</html>

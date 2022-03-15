@@ -1,0 +1,16 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="hu">
+<head th:replace="Layout :: head">
+    <meta charset="UTF-8">
+    <title>Will be replaced</title>
+</head>
+<body>
+    <div class="content">
+        <h2 th:text="|Show group - ${group.name}|">Show group - GN</h2>
+
+        <a href="#" th:href="|@{/admin/group/}${group.id}/divisions|">divisions</a><br />
+        <a href="#" th:href="|@{/admin/group/}${group.id}/users|">users</a><br />
+        <a href="#" th:href="|@{/admin/group/}${group.id}/resources|">resources</a><br />
+    </div>
+</body>
+</html>

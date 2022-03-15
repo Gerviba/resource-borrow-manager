@@ -1,0 +1,44 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="hu">
+<head th:replace="Layout :: head">
+    <meta charset="UTF-8">
+    <title>Will be replaced</title>
+</head>
+<body>
+    <div class="content">
+        <h2>Edit user</h2>
+        <form action="#" th:action="@{/su/user/edit}" method="post" th:object="${user}">
+            <input type="hidden" th:field="*{id}" />
+
+            <label for="name">Name</label>
+            <input id="name" type="text" th:field="*{name}" /><br />
+
+            <label for="email">Email</label>
+            <input id="email" type="text" th:field="*{email}" /><br />
+
+            <label for="neptun">Neptun</label>
+            <input id="neptun" type="text" th:field="*{neptun}" /><br />
+
+            <label for="teams">Teams</label>
+            <input id="teams" type="text" th:field="*{teams}" /><br />
+
+            <label for="room">Room</label>
+            <input id="room" type="text" th:field="*{room}" /><br />
+
+            <label for="mobile">Mobile</label>
+            <input id="mobile" type="text" th:field="*{mobile}" /><br />
+
+            <label for="locked">Locked</label>
+            <input id="locked" type="checkbox" th:field="*{locked}" /><br />
+
+            <label for="role">Role</label>
+            <select id="role" th:field="*{role}">
+                <option th:each="opt : ${T(hu.gerviba.borrower.model.UserRole).values()}" th:value="${opt}" th:text="${opt.name()}"></option>
+            </select>
+
+            <input type="submit" />
+        </form>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="hu">
+<head th:replace="Layout :: head">
+    <meta charset="UTF-8">
+    <title>Will be replaced</title>
+</head>
+<body>
+    <div class="content">
+        <h2>Edit resource access</h2>
+
+        <h3>Currently having access:</h3>
+        <form action="#"
+              method="post"
+              th:action="|@{/admin/group/}${groupId}/resource/${resourceId}/access/revoke|"
+              th:each="division : ${ownerDivisions}"
+              th:object="${division}">
+
+            <input type="hidden" name="id" th:value="*{id}" />
+            <span th:text="*{name}">name of the division</span>
+            <input type="submit" value="revoke" /><br />
+        </form>
+
+        <h3>Grant access:</h3>
+        <form action="#" method="post" th:action="|@{/admin/group/}${groupId}/resource/${resourceId}/access/grant|">
+
+            <select name="id">
+                <option th:each="opt : ${availableDivisions}" th:text="${opt.name}" th:value="${opt.id}">division</option>
+            </select>
+            <input type="submit" value="grant" /><br />
+        </form>
+
+        <a href="#" th:href="|@{/admin/group/}${groupId}/resources|">back</a><br />
+    </div>
+</body>
+</html>

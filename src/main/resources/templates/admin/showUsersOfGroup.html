@@ -1,0 +1,39 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="hu">
+<head th:replace="Layout :: head">
+    <meta charset="UTF-8">
+    <title>Will be replaced</title>
+</head>
+<body>
+    <div class="content">
+        <h2>Show users</h2>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>...</th>
+                <th>...</th>
+            </tr>
+            <tr class="group" th:each="user : ${users}" th:object="${user}">
+                <td th:text="*{name}">user name</td>
+                <td>
+                    <form th:action="|@{/admin/group/}${groupId}/user/kick|" method="post">
+                        <input type="hidden" name="userId" th:value="*{id}">
+                        <input type="submit" value="kick" />
+                    </form>
+                </td>
+                <td>
+                    <a href="#" th:href="|@{/templates/regular/}*{id}|">profile</a>
+                </td>
+            </tr>
+        </table>
+
+        <h3>Add user to the group</h3>
+        <form th:action="|@{/admin/group/}${groupId}/user/add|" method="post">
+            <select name="userId">
+                <option th:each="opt : ${availableUsers}" th:value="${opt.id}" th:text="|${opt.name} (${opt.id})|"></option>
+            </select>
+            <input type="submit" value="add" />
+        </form>
+    </div>
+</body>
+</html>

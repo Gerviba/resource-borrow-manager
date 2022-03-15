@@ -1,0 +1,34 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="hu">
+<head th:replace="Layout :: head">
+    <meta charset="UTF-8">
+    <title>Will be replaced</title>
+</head>
+<body>
+    <div class="content">
+        <h2>Show group</h2>
+        <table th:object="${group}">
+            <tr>
+                <th>Property</th>
+                <th>Value</th>
+            </tr>
+            <tr>
+                <td>Name</td>
+                <td th:text="*{name}">group name</td>
+            </tr>
+            <tr>
+                <td>Website</td>
+                <td th:text="*{website}">website</td>
+            </tr>
+            <tr>
+                <td>Introduction</td>
+                <td th:text="*{introduction}">introduction</td>
+            </tr>
+            <tr>
+                <td>Visible</td>
+                <td th:text="*{visible} ? 'yes' : 'no'">yes</td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
