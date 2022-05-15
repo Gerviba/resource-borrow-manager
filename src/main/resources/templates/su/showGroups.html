@@ -1,27 +1,34 @@
 <!doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="hu">
 <head th:replace="Layout :: head">
-    <meta charset="UTF-8">
-    <title>Will be replaced</title>
 </head>
 <body>
-    <div class="content">
-        <h2>Show groups</h2>
-        <table>
-            <tr>
-                <th>Group</th>
-                <th>...</th>
-            </tr>
-            <tr class="group" th:each="group : ${groups}" th:object="${group}">
-                <td th:text="*{name}">group name</td>
-                <td>
-                    <a href="#" th:href="|@{/su/group/}*{id}|">open</a>
-                    <a href="#" th:href="|@{/su/group/}*{id}/edit|">edit</a>
-                    <a href="#" th:href="|@{/admin/group/}*{id}|">manage</a>
-                </td>
-            </tr>
-        </table>
-        <a href="#" th:href="@{/su/group}">new group</a>
+<div class="content">
+    <div class="split">
+        <div th:replace="Layout :: mobile"></div>
+        <div th:replace="Layout :: menu(${user})"></div>
+
+        <div class="payload">
+            <div class="page page-short">
+                <h1>Csoportok kezelése</h1>
+                <table>
+                    <tr>
+                        <th>Csoport</th>
+                        <th></th>
+                    </tr>
+                    <tr class="group" th:each="group : ${groups}" th:object="${group}">
+                        <td th:text="*{name}">group name</td>
+                        <td class="right-text">
+                            <a href="#" th:href="|@{/su/group/}*{id}/edit|"><span class="material-icons fix-icons">edit</span></a>
+                            <a href="#" th:href="|@{/admin/group/}*{id}|"><span class="material-icons fix-icons">settings</span></a>
+                            <a href="#" th:href="|@{/su/group/}*{id}|"><span class="material-icons fix-icons">group</span></a>
+                        </td>
+                    </tr>
+                </table>
+                <a href="#" th:href="@{/su/group}" class="btn btn-secondary">Új csoport</a>
+            </div>
+        </div>
     </div>
+</div>
 </body>
 </html>

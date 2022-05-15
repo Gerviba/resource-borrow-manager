@@ -1,0 +1,103 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="hu">
+<head th:replace="Layout :: head">
+</head>
+<body>
+<div class="content">
+    <div class="split">
+        <div th:replace="Layout :: mobile"></div>
+        <div th:replace="Layout :: menu(${user})"></div>
+
+        <div class="payload">
+            <div class="page page-short">
+                <h1 th:text="${resource.name}">Resource name</h1>
+
+                <h2>Részletek</h2>
+                <table>
+                    <tr>
+                        <td>Megnevezés</td>
+                        <td th:text="${resource.name}" class="light"></td>
+                    </tr>
+                    <tr>
+                        <td>Tulajdonos csoport</td>
+                        <td><a th:text="${resource?.ownerGroup?.name ?: 'nincs'}" th:href="|@{/group}/${resource?.ownerGroup?.id ?: 0}|" class="link"></a></td>
+                    </tr>
+                    <tr>
+                        <td>Kezelő részlegek</td>
+                        <td>
+                            <div th:each="division : ${resource.maintainerDivisions}">
+                                <a th:text="${division.name}" th:href="|@{/division}/${division.id}|" class="link"></a>
+                            </div>
+                            <i th:if="${resource.maintainerDivisions.isEmpty()}">nincs</i>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Leírás</td>
+                        <td class="light" th:text="${resource.description}"></td>
+                    </tr>
+                    <tr>
+                        <td>Foglalható</td>
+                        <td class="light" th:text="${resource.available} ? 'igen' : 'nem'"></td>
+                    </tr>
+                    <tr>
+                        <td>Tároló helyiség</td>
+                        <td class="light" th:text="${resource.storageRoom}"></td>
+                    </tr>
+                    <tr>
+                        <td>Létrehozva</td>
+                        <td class="light" th:text="${resource.getCreatedString()}"></td>
+                    </tr>
+                    <tr>
+                        <td>Utoljára módosítva</td>
+                        <td class="light" th:text="${resource.getLastUpdatedString()}"></td>
+                    </tr>
+                    <tr>
+                        <td>Utoljára leltározva</td>
+                        <td class="light" th:text="${resource.getLastCheckedString()}"></td>
+                    </tr>
+                </table>
+
+                <h2>Foglaltság</h2>
+                <div class="card-box card" th:each="booking : ${bookings}">
+                    <div class="card-part">
+                        <span class="material-icons fix-icons danger" th:text="${booking.issued ? 'event': 'calendar_today'}">calendar_today</span>&nbsp;<b th:text="|${booking.getDateStartString()} - ${booking.getDateEndString()}|">date - date</b><br>
+                        <span class="note" th:text="${booking.borrowerName}">borrower</span>
+                    </div>
+                    <div class="card-part">
+                    </div>
+                </div>
+                <p th:if="${bookings.isEmpty()}">Nincs elérhető korábbi foglalás</p>
+
+                <h2>Lehetőségek</h2>
+                <a href="#" th:href="|@{/resource}/${resource.id}/request|" class="btn btn-secondary btn-large" th:if="${resource.available}">Lefoglalás</a>
+                <a href="#" th:href="|@{/resource}/${resource.id}/history|" class="btn btn-secondary btn-large">Régbbi foglalások</a>
+
+                <!-- admin -->
+                <a href="#" th:href="|@{/admin/group}/${resource.ownerGroup?.id}/resource/${resource.id}/edit|" class="btn btn-secondary btn-large">Szerkesztés</a><br />
+
+                <h2>QR Kód</h2>
+                <table>
+                    <tr>
+                        <td class="centered-text">
+                            <a th:href="|/cdn/codes/${resource.id}.png|" target="_blank">
+                                <img alt="Erőforrás QR kódja" th:src="|/cdn/codes/${resource.id}.png|" height="120" width="120" class="mt-1">
+                            </a>
+                        </td>
+                        <td class="centered-text">
+                            <a th:href="|/cdn/codes/${resource.id}-full.png|" target="_blank">
+                                <img alt="Erőforrás teljes QR kódja" th:src="|/cdn/codes/${resource.id}-full.png|" height="120" width="120" class="mt-1">
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="light centered-text">Erőforrás QR kódja</td>
+                        <td class="light centered-text">Erőforrás QR kódja (URL-el)</td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

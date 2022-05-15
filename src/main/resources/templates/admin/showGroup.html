@@ -1,16 +1,52 @@
 <!doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="hu">
 <head th:replace="Layout :: head">
-    <meta charset="UTF-8">
-    <title>Will be replaced</title>
 </head>
 <body>
-    <div class="content">
-        <h2 th:text="|Show group - ${group.name}|">Show group - GN</h2>
+<div class="content">
+    <div class="split">
+        <div th:replace="Layout :: mobile"></div>
+        <div th:replace="Layout :: menu(${user})"></div>
 
-        <a href="#" th:href="|@{/admin/group/}${group.id}/divisions|">divisions</a><br />
-        <a href="#" th:href="|@{/admin/group/}${group.id}/users|">users</a><br />
-        <a href="#" th:href="|@{/admin/group/}${group.id}/resources|">resources</a><br />
+        <div class="payload">
+            <div class="page page-short">
+                <h1 th:text="${group.name}">Show group - GN</h1>
+
+                <h2>Adatok</h2>
+                <table th:object="${group}">
+                    <tr>
+                        <td>Név</td>
+                        <td th:text="*{name}" class="light">group name</td>
+                    </tr>
+                    <tr>
+                        <td>Teljes név</td>
+                        <td th:text="*{longName}" class="light">group name</td>
+                    </tr>
+                    <tr>
+                        <td>Weblap</td>
+                        <td class="light"><a th:href="*{website}" th:text="*{website}" class="link link-out" target="_blank">link</a></td>
+                    </tr>
+                    <tr>
+                        <td>Bemutatkozás</td>
+                        <td th:text="*{introduction}" class="light">introduction</td>
+                    </tr>
+                    <tr>
+                        <td>Látható</td>
+                        <td th:text="*{visible} ? 'igen' : 'nem'" class="light">yes</td>
+                    </tr>
+                </table>
+
+                <h2>Lehetőségek</h2>
+                <div class="centered-text mb-3">
+                    <a href="#" th:href="|@{/admin/group/}${group.id}/divisions|" class="btn btn-secondary btn-large">Részlegek</a>
+                    <a href="#" th:href="|@{/admin/group/}${group.id}/users|"     class="btn btn-secondary btn-large">Felhasználók</a>
+                    <a href="#" th:href="|@{/admin/group/}${group.id}/resources|" class="btn btn-secondary btn-large">Erőforrások</a>
+                </div>
+
+                <a href="#" th:href="|@{/admin}|" class="btn btn-secondary btn-large">Vissza</a>
+            </div>
+        </div>
     </div>
+</div>
 </body>
 </html>

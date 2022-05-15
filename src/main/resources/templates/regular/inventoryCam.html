@@ -1,0 +1,134 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="hu">
+<head th:replace="Layout :: head">
+</head>
+<body>
+<div class="content">
+    <div class="split">
+        <div th:replace="Layout :: mobile"></div>
+        <div th:replace="Layout :: menu(${user})"></div>
+
+        <div class="payload qr-page">
+            <div class="qr-container">
+                <video id="qr-video" class="background" onclick="document.getElementById('result-name').innerText = '';"></video>
+                <h3 id="result-name" class="qr-item-name"></h3>
+            </div>
+            <div class="controls">
+                <button id="flash-toggle" class="btn btn-secondary"><span id="flash-state" class="material-icons">flashlight_off</span></button>
+                <button id="start-button" class="btn btn-secondary"><span class="material-icons">videocam_off</span></button>
+                <button id="stop-button" class="btn btn-secondary"><span class="material-icons">videocam</span></button>
+
+                <div class="hidden">
+                    <b>Device has camera: </b><span id="cam-has-camera"></span><br>
+                    <b>Device has flash: </b><span id="cam-has-flash"></span><br>
+                    <b>Last detected at: </b><span id="cam-qr-result-timestamp"></span><br>
+                </div>
+            </div>
+
+            <div class="display hidden" id="debug-box">
+                <span id="cam-qr-result"></span><br>
+                <span id="prompt-name"></span><br>
+                <span id="debug"></span>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script type="module" th:inline="javascript">
+
+    import QrScanner from "/js/qr-scanner.min.js";
+    QrScanner.WORKER_PATH = '/js/qr-scanner-worker.min.js';
+
+    let lastReading = "n/a";
+    let lastSuccessful = 0;
+    let scanning = true;
+
+    const video = document.getElementById('qr-video');
+    const camHasCamera = document.getElementById('cam-has-camera');
+    const camHasFlash = document.getElementById('cam-has-flash');
+    const flashToggle = document.getElementById('flash-toggle');
+    const flashState = document.getElementById('flash-state');
+    const camQrResult = document.getElementById('cam-qr-result');
+
+    function updateInventory(data) {
+        setTimeout(async () => {
+            const name = await httpFetchData('GET', `/inventory/check/${encodeURIComponent(btoa(data))}`);
+            console.log(name);
+            document.getElementById('result-name').innerText = `${name} leltárazva`;
+        }, 0);
+    }
+
+    function setResult(label, result) {
+        if (result === lastReading && (Date.now() - lastSuccessful) < 5000) {
+            document.getElementById('debug').innerText = "Cooldown nem járt le!";
+            return;
+        }
+        if (result === '' || result == null || typeof result === "undefined") {
+            return;
+        }
+
+        document.getElementById('debug').innerText = "Feloldás";
+        lastReading = result;
+        lastSuccessful = Date.now();
+
+        updateInventory(result);
+    }
+
+    QrScanner.hasCamera().then(hasCamera => camHasCamera.textContent = hasCamera);
+
+    const scanner = new QrScanner(video, result => setResult(camQrResult, result), error => {
+        camQrResult.textContent = error;
+        camQrResult.style.color = 'inherit';
+    });
+    scanner.start().then(() => {
+
+        scanner.hasFlash().then(hasFlash => {
+            camHasFlash.textContent = hasFlash;
+            if (hasFlash) {
+                flashToggle.style.display = 'inline-block';
+                flashToggle.addEventListener('click', () => {
+                    scanner.toggleFlash().then(() => flashState.textContent = scanner.isFlashOn() ? 'flashlight_on' : 'flashlight_off');
+                });
+            }
+        });
+    });
+    document.getElementById('stop-button').style.display = 'inline-block';
+    document.getElementById('start-button').style.display = 'none';
+
+    window.scanner = scanner;
+
+    document.getElementById('start-button').addEventListener('click', () => {
+        scanner.start();
+        document.getElementById('stop-button').style.display = 'inline-block';
+        document.getElementById('start-button').style.display = 'none';
+        scanning = true;
+    });
+
+    document.getElementById('stop-button').addEventListener('click', () => {
+        scanner.stop();
+        document.getElementById('start-button').style.display = 'inline-block';
+        document.getElementById('stop-button').style.display = 'none';
+        scanning = false;
+    });
+
+    async function httpFetchData(method = 'POST', url = '', data = {}) {
+        const response = await fetch(url, {
+            method: method,
+            mode: 'cors',
+            cache: 'no-cache',
+        });
+        return response.text();
+    }
+
+    window.addEventListener("orientationchange", function() {
+        if (scanning) {
+            scanner.stop();
+            setTimeout(() => scanner.start(), 200);
+        }
+    }, false);
+
+</script>
+
+</body>
+</html>

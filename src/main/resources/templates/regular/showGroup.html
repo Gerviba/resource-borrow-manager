@@ -1,0 +1,67 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="hu">
+<head th:replace="Layout :: head">
+</head>
+<body>
+<div class="content">
+    <div class="split">
+        <div th:replace="Layout :: mobile"></div>
+        <div th:replace="Layout :: menu(${user})"></div>
+
+        <div class="payload">
+            <div class="page page-short">
+                <h1 th:text="${group.name}">XY division</h1>
+
+                <h2>Adatok</h2>
+                <table th:object="${group}">
+                    <tr>
+                        <td>Név</td>
+                        <td th:text="*{name}" class="light">group name</td>
+                    </tr>
+                    <tr>
+                        <td>Teljes név</td>
+                        <td th:text="*{longName}" class="light">group name</td>
+                    </tr>
+                    <tr>
+                        <td>Weblap</td>
+                        <td class="light"><a th:href="*{website}" th:text="*{website}" class="link link-out" target="_blank">link</a></td>
+                    </tr>
+                </table>
+
+                <div class="card mb-3">
+                    <ins th:text="${group.introduction}" th:remove="tag"></ins>
+                </div>
+
+                <h2>Részlegek</h2>
+                <table>
+                    <tr>
+                        <th>Név</th>
+                        <th></th>
+                    </tr>
+                    <tr class="group" th:each="division : ${divisions}" th:object="${division}">
+                        <td th:text="*{name}">division name</td>
+                        <td class="right-text">
+                            <a href="#" th:href="|@{/division/}*{id}|"><span class="material-icons fix-icons">account_box</span></a>
+                        </td>
+                    </tr>
+                </table>
+
+                <h2>Tagok</h2>
+                <table>
+                    <tr>
+                        <th>Név</th>
+                        <th></th>
+                    </tr>
+                    <tr class="group" th:each="member : ${members}" th:object="${member}">
+                        <td th:text="*{name}">member name</td>
+                        <td class="right-text">
+                            <a href="#" th:href="|@{/user/}*{id}|"><span class="material-icons fix-icons">person</span></a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

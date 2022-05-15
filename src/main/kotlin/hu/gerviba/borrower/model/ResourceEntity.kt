@@ -1,10 +1,12 @@
 package hu.gerviba.borrower.model
 
+import org.hibernate.Hibernate
 import org.hibernate.search.mapper.pojo.automaticindexing.ReindexOnUpdate
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexingDependency
+import java.text.SimpleDateFormat
 import javax.persistence.*
 
 @Entity
@@ -53,16 +55,43 @@ data class ResourceEntity(
     var lastUpdated: Long = 0,
 
     @Column(nullable = false)
-    var lastChecked: Long = 0
+    var lastChecked: Long = 0,
 
-) {
     @ManyToMany
     @JoinTable
     @IndexedEmbedded
     @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)
-    open var maintainerDivisions: MutableSet<DivisionEntity> = mutableSetOf()
+    var maintainerDivisions: MutableSet<DivisionEntity> = mutableSetOf(),
 
-    @OneToMany
-    @JoinTable
-    open var bookings: MutableList<BookingEntity> = mutableListOf()
+    @OneToMany(mappedBy = "resource")
+    var bookings: MutableList<BookingEntity> = mutableListOf(),
+
+    @Column(nullable = false)
+    var imageName: String = "",
+) {
+
+    companion object {
+        private val DATE_FORMAT = SimpleDateFormat("yyyy-MM-dd HH:mm")
+    }
+
+    fun getCreatedString(): String = DATE_FORMAT.format(created)
+
+    fun getLastUpdatedString(): String = DATE_FORMAT.format(lastUpdated)
+
+    fun getLastCheckedString(): String = DATE_FORMAT.format(lastChecked)
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
+        other as ResourceEntity
+
+        return id != 0 && id == other.id
+    }
+
+    override fun hashCode(): Int = javaClass.hashCode()
+
+    @Override
+    override fun toString(): String {
+        return this::class.simpleName + "(id = $id )"
+    }
 }

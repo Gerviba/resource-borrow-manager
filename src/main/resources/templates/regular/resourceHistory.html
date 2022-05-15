@@ -1,0 +1,54 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="hu">
+<head th:replace="Layout :: head">
+</head>
+<body>
+<div class="content">
+    <div class="split">
+        <div th:replace="Layout :: mobile"></div>
+        <div th:replace="Layout :: menu(${user})"></div>
+
+        <div class="payload">
+            <div class="page page-short">
+                <h2>Korábbi foglalások</h2>
+
+                <table th:each="booking : ${bookings}" th:id="|booking-${booking.id}|">
+                    <tr>
+                        <td>Kezdete</td>
+                        <td th:text="${booking.getDateStartString()}" class="light"></td>
+                    </tr>
+                    <tr>
+                        <td>Vége</td>
+                        <td th:text="${booking.getDateEndString()}" class="light"></td>
+                    </tr>
+                    <tr>
+                        <td>Kiadva?</td>
+                        <td th:text="${booking.issued ? booking.getRealDateStartString() : 'nem'}" th:class="${booking.issued ? 'success' : 'light'}"></td>
+                    </tr>
+                    <tr>
+                        <td>Visszahozva?</td>
+                        <td th:text="${booking.closed ? booking.getRealDateEndString() : 'nem'}" th:class="${booking.closed ? 'success' : 'danger'}"></td>
+                    </tr>
+                    <tr>
+                        <td>Foglaló megjegyzése</td>
+                        <td class="light"><b th:text="${booking?.borrower?.name ?: 'n/a'}"></b> <ins th:text="${booking.borrowerComment}" th:remove="tag"></ins></td>
+                    </tr>
+                    <tr>
+                        <td>Átadó</td>
+                        <td class="light"><b th:text="${booking?.handlerAdministerOutbound?.name ?: '-'}"></b> <ins th:text="${booking.receptionComment}" th:remove="tag"></ins></td>
+                    </tr>
+                    <tr>
+                        <td>Átvevő megjegyzése</td>
+                        <td class="light"><b th:text="${booking?.handlerAdministerInbound?.name ?: '-'}"></b> <ins th:text="${booking.recaptureComment}" th:remove="tag"></ins></td>
+                    </tr>
+                </table>
+
+                <p th:if="${bookings.isEmpty()}">Nincs elérhető korábbi foglalás</p>
+
+                <a th:href="|@{/resource}/${resourceId}|" class="btn btn-secondary btn-large">Vissza</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

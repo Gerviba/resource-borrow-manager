@@ -2,17 +2,66 @@
 <html lang="en">
 <head th:fragment="header">
     <meta charset="UTF-8">
-    <title>AppName</title>
+    <title th:text="#{app.name}">AppName</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
-    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
-    <meta name="msapplication-TileColor" content="#da532c">
-    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="../static/style.css" th:href="@{/style.css}">
+    <meta name="theme-color" content="#444444">
+    <meta name="msapplication-navbutton-color" content="#444444"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="#444444"/>
+    <meta name="msapplication-tap-highlight" content="no">
+    <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/dark.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 </head>
 <body>
+
+    <div class="content">
+        <div class="split">
+            <div class="header" th:fragment="mobile">
+                <span th:text="#{app.name}">AppName</span>
+                <span class="material-icons fix-icons menu-icon" onclick="document.getElementById('menu').style.display = 'block'">menu</span>
+            </div>
+            <div class="menu" th:fragment="menu(userEntity)" id="menu">
+                <h1 th:text="#{app.name}">AppName</h1>
+                <div class="exit" onclick="document.getElementById('menu').style.display = 'none'">x</div>
+                <div class="separate"></div>
+
+                <h2>Általános</h2>
+                <a href="#" th:href="@{/}"><span class="material-icons fix-icons">home</span> Kezdőlap</a>
+                <a href="#" th:href="@{/search}"><span class="material-icons fix-icons">search</span> Erőforrások</a>
+                <a href="#" th:href="@{/identify}"><span class="material-icons fix-icons">qr_code_scanner</span> Beazonosítás</a>
+                <a href="#" th:href="@{/groups}"><span class="material-icons fix-icons">group</span> Csoportok</a>
+
+                <h2>Felhasználói</h2>
+                <a href="#" th:href="@{/profile}"><span class="material-icons fix-icons">home</span> Profil</a>
+                <a href="#" th:href="@{/profile/requests}"><span class="material-icons fix-icons">event</span> Foglalásaim</a>
+                <a href="#" th:href="@{/receive}"><span class="material-icons fix-icons">qr_code</span> Átvétel</a>
+
+                <h2>Csoport</h2>
+                <a href="#" th:href="@{/requests}"><span class="material-icons fix-icons">free_cancellation</span> Kérelmek
+                    <ins class="danger-badge" th:if="${requestCount != null && requestCount > 0}" th:text="${requestCount > 20 ? '20+' : requestCount}">20+</ins>
+                </a>
+                <a href="#" th:href="@{/return}"><span class="material-icons fix-icons">assignment_return</span> Visszavétel</a>
+                <a href="#" th:href="@{/inventory}"><span class="material-icons fix-icons">fact_check</span> Leltárazás</a>
+
+                <h2>Adminisztráció</h2>
+                <a href="#" th:href="@{/admin}"><span class="material-icons fix-icons">settings</span> Admin menü</a>
+                <a href="#" th:href="@{/su/groups}"><span class="material-icons fix-icons">star</span> Csoportok kezelése</a>
+                <a href="#" th:href="@{/su/users}"><span class="material-icons fix-icons">star</span> Felhasználók kezelése</a>
+
+                <div class="separate"></div>
+
+                <a href="#" th:href="@{/control/logout}"><span class="material-icons fix-icons">logout</span> Kijelentkezés</a>
+
+                <div class="separate"></div>
+            </div>
+        </div>
+    </div>
 
 </body>
 </html>

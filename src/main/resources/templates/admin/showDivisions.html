@@ -1,27 +1,36 @@
 <!doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="hu">
 <head th:replace="Layout :: head">
-    <meta charset="UTF-8">
-    <title>Will be replaced</title>
 </head>
 <body>
-    <div class="content">
-        <h2>Show divisions</h2>
-        <table>
-            <tr>
-                <th>Division</th>
-                <th>...</th>
-            </tr>
-            <tr class="group" th:each="division : ${divisions}" th:object="${division}">
-                <td th:text="*{name}">division name</td>
-                <td>
-                    <a href="#" th:href="|@{/admin/group/}${groupId}/division/*{id}/members|">members</a>
-                    <a href="#" th:href="|@{/admin/group/}${groupId}/division/*{id}/edit|">edit</a>
-                    <a href="#" th:href="|@{/division/}*{id}|">open</a>
-                </td>
-            </tr>
-        </table>
-        <a href="#" th:href="|@{/admin/group/}${groupId}/division|">new division</a>
+<div class="content">
+    <div class="split">
+        <div th:replace="Layout :: mobile"></div>
+        <div th:replace="Layout :: menu(${user})"></div>
+
+        <div class="payload">
+            <div class="page page-short">
+                <h1>Részlegek</h1>
+                <table>
+                    <tr>
+                        <th>Név</th>
+                        <th></th>
+                    </tr>
+                    <tr class="group" th:each="division : ${divisions}" th:object="${division}">
+                        <td th:text="*{name}">division name</td>
+                        <td class="right-text">
+                            <a href="#" th:href="|@{/admin/group/}${groupId}/division/*{id}/users|"><span class="material-icons fix-icons">manage_accounts</span></a>
+                            <a href="#" th:href="|@{/admin/group/}${groupId}/division/*{id}/edit|"><span class="material-icons fix-icons">edit</span></a>
+                            <a href="#" th:href="|@{/division/}*{id}|"><span class="material-icons fix-icons">account_box</span></a>
+                        </td>
+                    </tr>
+                </table>
+
+                <a href="#" th:href="|@{/admin/group/}${groupId}|" class="btn btn-secondary btn-large">Vissza</a>
+                <a href="#" th:href="|@{/admin/group/}${groupId}/division|" class="btn btn-large">Új részleg</a>
+            </div>
+        </div>
     </div>
+</div>
 </body>
 </html>

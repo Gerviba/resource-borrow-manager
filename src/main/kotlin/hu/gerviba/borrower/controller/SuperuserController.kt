@@ -7,6 +7,7 @@ import hu.gerviba.borrower.service.UserService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
+import javax.servlet.http.HttpServletRequest
 
 @Controller
 @RequestMapping("/su")
@@ -15,26 +16,24 @@ class SuperuserController(
     private val userService: UserService,
 ) {
 
-    @GetMapping("")
-    fun index(): String {
-        return "/su/suIndex"
-    }
-
     @GetMapping("/groups")
-    fun showGroups(model: Model): String {
-        model.addAttribute("groups", groupService.listAll())
+    fun showGroups(model: Model, httpServletRequest: HttpServletRequest): String {
+        model.addAttribute("groups", groupService.getAll())
+        userService.addDefaultFields(model, httpServletRequest)
         return "su/showGroups"
     }
 
     @GetMapping("/group/{groupId}")
-    fun groupManagement(@PathVariable groupId: Int, model: Model): String {
+    fun groupManagement(@PathVariable groupId: Int, model: Model, httpServletRequest: HttpServletRequest): String {
         model.addAttribute("group", groupService.getGroup(groupId))
+        userService.addDefaultFields(model, httpServletRequest)
         return "su/showSingleGroup"
     }
 
     @GetMapping("/group/{groupId}/edit")
-    fun updateGroup(@PathVariable groupId: Int, model: Model): String {
+    fun updateGroup(@PathVariable groupId: Int, model: Model, httpServletRequest: HttpServletRequest): String {
         model.addAttribute("group", groupService.getGroup(groupId))
+        userService.addDefaultFields(model, httpServletRequest)
         return "su/editGroup"
     }
 
@@ -45,8 +44,9 @@ class SuperuserController(
     }
 
     @GetMapping("/group")
-    fun createGroup(model: Model): String {
+    fun createGroup(model: Model, httpServletRequest: HttpServletRequest): String {
         model.addAttribute("newGroup", GroupEntity())
+        userService.addDefaultFields(model, httpServletRequest)
         return "su/createGroup"
     }
 
@@ -57,17 +57,16 @@ class SuperuserController(
     }
 
     @GetMapping("/users")
-    fun showUsers(model: Model): String {
+    fun showUsers(model: Model, httpServletRequest: HttpServletRequest): String {
         model.addAttribute("users", userService.getAllUsers())
+        userService.addDefaultFields(model, httpServletRequest)
         return "su/showUsers"
     }
 
     @GetMapping("/user/{userId}")
-    fun userManagement(@PathVariable userId: Int, model: Model): String {
-        model.addAttribute(
-            "user", userService.getUser(userId)
-                .copy(groups = mutableSetOf(), divisions = mutableSetOf())
-        )
+    fun userManagement(@PathVariable userId: Int, model: Model, httpServletRequest: HttpServletRequest): String {
+        model.addAttribute("user", userService.getUser(userId))
+        userService.addDefaultFields(model, httpServletRequest)
         return "su/editUser"
     }
 

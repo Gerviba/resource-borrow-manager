@@ -1,0 +1,23 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="hu">
+<head th:replace="Layout :: head">
+</head>
+<body>
+<div class="content">
+    <div class="split">
+        <div th:replace="Layout :: mobile"></div>
+        <div th:replace="Layout :: menu(${user})"></div>
+
+        <div class="payload">
+            <div class="page page-short">
+                <h1>Átvétel Sikeres</h1>
+
+                <h2 class="centered-text"><span th:text="${resourceName}" class="success"></span> sikeresen átvéve!</h2>
+
+                <a href="#" class="btn btn-secondary btn-large" onclick="history.back()">Vissza</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

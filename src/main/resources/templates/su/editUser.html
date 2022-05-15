@@ -1,44 +1,81 @@
 <!doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="hu">
 <head th:replace="Layout :: head">
-    <meta charset="UTF-8">
-    <title>Will be replaced</title>
 </head>
 <body>
-    <div class="content">
-        <h2>Edit user</h2>
-        <form action="#" th:action="@{/su/user/edit}" method="post" th:object="${user}">
-            <input type="hidden" th:field="*{id}" />
+<div class="content">
+    <div class="split">
+        <div th:replace="Layout :: mobile"></div>
+        <div th:replace="Layout :: menu(${user})"></div>
 
-            <label for="name">Name</label>
-            <input id="name" type="text" th:field="*{name}" /><br />
+        <div class="payload">
+            <div class="page page-short">
+                <h1>Felhasználó szerkesztése</h1>
+                <form action="#" th:action="@{/su/user/edit}" method="post" th:object="${user}">
+                    <input type="hidden" th:field="*{id}" />
 
-            <label for="email">Email</label>
-            <input id="email" type="text" th:field="*{email}" /><br />
+                    <div class="field-group">
+                        <label for="name">Név</label>
+                        <input id="name" type="text" th:field="*{name}" autocomplete="off" />
+                    </div>
 
-            <label for="neptun">Neptun</label>
-            <input id="neptun" type="text" th:field="*{neptun}" /><br />
+                    <div class="field-group">
+                        <label for="internalId">Belső azonosító</label>
+                        <input id="internalId" type="text" th:field="*{internalId}" disabled autocomplete="off" />
+                    </div>
 
-            <label for="teams">Teams</label>
-            <input id="teams" type="text" th:field="*{teams}" /><br />
+                    <div class="field-group">
+                        <label for="email">Email</label>
+                        <input id="email" type="text" th:field="*{email}" autocomplete="off" />
+                    </div>
 
-            <label for="room">Room</label>
-            <input id="room" type="text" th:field="*{room}" /><br />
+                    <div class="field-group">
+                        <label for="neptun">Neptun</label>
+                        <input id="neptun" type="text" th:field="*{neptun}" autocomplete="off" />
+                    </div>
 
-            <label for="mobile">Mobile</label>
-            <input id="mobile" type="text" th:field="*{mobile}" /><br />
+                    <div class="field-group">
+                        <label for="teams">Teams elérhetőség</label>
+                        <input id="teams" type="text" th:field="*{teams}" autocomplete="off" />
+                    </div>
 
-            <label for="locked">Locked</label>
-            <input id="locked" type="checkbox" th:field="*{locked}" /><br />
+                    <div class="field-group">
+                        <label for="room">Szoba</label>
+                        <input id="room" type="text" th:field="*{room}" autocomplete="off" />
+                    </div>
 
-            <label for="role">Role</label>
-            <select id="role" th:field="*{role}">
-                <option th:each="opt : ${T(hu.gerviba.borrower.model.UserRole).values()}" th:value="${opt}" th:text="${opt.name()}"></option>
-            </select>
+                    <div class="field-group">
+                        <label for="mobile">Mobile</label>
+                        <input id="mobile" type="text" th:field="*{mobile}" autocomplete="off" />
+                    </div>
 
-            <input type="submit" />
-        </form>
+                    <div class="field-group">
+                        <label for="locked">Zárolt</label>
+                        <div style="clear: both"></div>
 
+                        <label class="switch">
+                            <input type="checkbox" th:checked="*{locked}" th:name="locked" id="locked" />
+                            <span class="slider"></span>
+                        </label>
+                        <span class="note">Tiltva legyen-e a felhasználó a belépéstől?</span>
+                        <div style="clear: both"></div>
+                    </div>
+
+                    <div class="field-group">
+                        <label for="role">Hozzáférési szint</label>
+                        <div style="clear: both"></div>
+                        <select id="role" th:field="*{role}">
+                            <option th:each="opt : ${T(hu.gerviba.borrower.model.UserRole).values()}" th:value="${opt}" th:text="${opt.name()}"></option>
+                        </select>
+                    </div>
+
+                    <div class="field-group">
+                        <input type="submit" value="Mentés" class="btn-large" />
+                        <a th:href="@{/su/users}" class="btn btn-secondary btn-large">Vissza</a>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </body>
 </html>

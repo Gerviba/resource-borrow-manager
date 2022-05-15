@@ -1,34 +1,42 @@
 <!doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="hu">
 <head th:replace="Layout :: head">
-    <meta charset="UTF-8">
-    <title>Will be replaced</title>
 </head>
 <body>
-    <div class="content">
-        <h2>Show group</h2>
-        <table th:object="${group}">
-            <tr>
-                <th>Property</th>
-                <th>Value</th>
-            </tr>
-            <tr>
-                <td>Name</td>
-                <td th:text="*{name}">group name</td>
-            </tr>
-            <tr>
-                <td>Website</td>
-                <td th:text="*{website}">website</td>
-            </tr>
-            <tr>
-                <td>Introduction</td>
-                <td th:text="*{introduction}">introduction</td>
-            </tr>
-            <tr>
-                <td>Visible</td>
-                <td th:text="*{visible} ? 'yes' : 'no'">yes</td>
-            </tr>
-        </table>
+<div class="content">
+    <div class="split">
+        <div th:replace="Layout :: mobile"></div>
+        <div th:replace="Layout :: menu(${user})"></div>
+
+        <div class="payload">
+            <div class="page page-short">
+                <h1>Csoport: <ins th:text="${group.name}" th:remove="tag">GROUP</ins></h1>
+
+                <table th:object="${group}">
+                    <tr>
+                        <td>Név</td>
+                        <td th:text="*{name}" class="light">group name</td>
+                    </tr>
+                    <tr>
+                        <td>Teljes név</td>
+                        <td th:text="*{longName}" class="light">group name</td>
+                    </tr>
+                    <tr>
+                        <td>Weblap</td>
+                        <td class="light"><a th:href="*{website}" th:text="*{website}" class="link link-out" target="_blank">link</a></td>
+                    </tr>
+                    <tr>
+                        <td>Bemutatkozás</td>
+                        <td th:text="*{introduction}" class="light">introduction</td>
+                    </tr>
+                    <tr>
+                        <td>Látható</td>
+                        <td th:text="*{visible} ? 'igen' : 'nem'" class="light">yes</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
     </div>
+</div>
 </body>
 </html>

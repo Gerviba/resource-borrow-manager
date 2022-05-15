@@ -6,4 +6,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface GroupRepository : JpaRepository<GroupEntity, Int> {
+
+    fun findAllByVisibleTrue(): List<GroupEntity>
+
 }

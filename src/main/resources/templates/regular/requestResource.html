@@ -1,0 +1,90 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="hu">
+<head th:replace="Layout :: head">
+</head>
+<body onload="checkInterval()">
+<div class="content">
+    <div class="split">
+        <div th:replace="Layout :: mobile"></div>
+        <div th:replace="Layout :: menu(${user})"></div>
+
+        <div class="payload">
+            <div class="page page-short">
+                <h2>Új foglalás</h2>
+                <form action="#" th:action="|@{/resource}/${resourceId}/request|" method="post" th:object="${newRequest}">
+                    <div class="field-group">
+                        <label for="dateStart">Foglalás kezdete</label>
+                        <input type="text"
+                               class="datetime-picker"
+                               id="dateStart"
+                               th:name="dateStart"
+                               th:value="*{dateStart}"
+                               required
+                               onchange="checkInterval()"
+                        />
+                        <span class="note">Ekkor vinnéd el az erőforrást</span><br />
+                    </div>
+
+                    <div class="field-group">
+                        <label for="dateEnd">Foglalás vége</label>
+                        <input type="text"
+                               class="datetime-picker"
+                               id="dateEnd"
+                               th:name="dateEnd"
+                               th:value="*{dateEnd}"
+                               required
+                               onchange="checkInterval()"
+                        />
+                        <span class="note">Ekkor hoznád vissza azerőforrást</span><br />
+                    </div>
+
+                    <div class="card danger mt-2 mb-2" id="locked-message" style="display: none">
+                        Ebben az intervallumban az erőforrás már foglalt! Ellenőrizd a foglalásokat!
+                    </div>
+                    <div class="card danger mt-2 mb-2" id="invalid-range-message" style="display: none">
+                        A foglalás végének később kell lennie, mint a kezdetének!
+                    </div>
+
+                    <div class="field-group">
+                        <label for="description">Megjegyzés</label>
+                        <textarea id="description" th:field="*{comment}"></textarea>
+                        <span class="note warning">A foglalást majd manuálisan jóvá kell hagynia egy illetékesnek!</span><br />
+                    </div>
+
+                    <div class="field-group">
+                        <input type="submit" value="Lefoglal" class="btn-large" />
+                        <a th:href="|@{/resource}/${resourceId}|" class="btn btn-secondary btn-large">Vissza</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    async function checkInterval() {
+        const from = document.getElementById('dateStart').value;
+        const to = document.getElementById('dateEnd').value;
+        const resourceId = /*[[${resourceId}]]*/ 0;
+        const requests = JSON.parse(await httpFetchData('GET', `/resource/${resourceId}/available/${from}/${to}`));
+        document.getElementById('locked-message').style.display = requests.length === 0 ? 'none' : 'block';
+        document.getElementById('invalid-range-message').style.display = from >= to ? 'block' : 'none';
+    }
+
+    async function httpFetchData(method = 'POST', url = '', data = {}) {
+        const response = await fetch(url, {
+            method: method,
+            mode: 'cors',
+            cache: 'no-cache',
+        });
+        return response.text();
+    }
+
+    flatpickr(".datetime-picker", {
+        enableTime: true,
+        altInput: true,
+        altFormat: "Y-m-d H:i",
+        dateFormat: "U"
+    });
+</script>
+</body>
+</html>

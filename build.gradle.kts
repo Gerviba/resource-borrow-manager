@@ -27,6 +27,8 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.hibernate.search:hibernate-search-mapper-orm:6.0.8.Final")
     implementation("org.hibernate.search:hibernate-search-backend-lucene:6.0.8.Final")
+    implementation("com.google.zxing:core:3.3.0")
+    implementation("com.google.zxing:javase:3.3.0")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("com.h2database:h2")
     runtimeOnly("mysql:mysql-connector-java")

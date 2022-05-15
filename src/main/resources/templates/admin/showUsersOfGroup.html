@@ -1,39 +1,48 @@
 <!doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="hu">
 <head th:replace="Layout :: head">
-    <meta charset="UTF-8">
-    <title>Will be replaced</title>
 </head>
 <body>
-    <div class="content">
-        <h2>Show users</h2>
-        <table>
-            <tr>
-                <th>Name</th>
-                <th>...</th>
-                <th>...</th>
-            </tr>
-            <tr class="group" th:each="user : ${users}" th:object="${user}">
-                <td th:text="*{name}">user name</td>
-                <td>
-                    <form th:action="|@{/admin/group/}${groupId}/user/kick|" method="post">
-                        <input type="hidden" name="userId" th:value="*{id}">
-                        <input type="submit" value="kick" />
-                    </form>
-                </td>
-                <td>
-                    <a href="#" th:href="|@{/templates/regular/}*{id}|">profile</a>
-                </td>
-            </tr>
-        </table>
+<div class="content">
+    <div class="split">
+        <div th:replace="Layout :: mobile"></div>
+        <div th:replace="Layout :: menu(${user})"></div>
 
-        <h3>Add user to the group</h3>
-        <form th:action="|@{/admin/group/}${groupId}/user/add|" method="post">
-            <select name="userId">
-                <option th:each="opt : ${availableUsers}" th:value="${opt.id}" th:text="|${opt.name} (${opt.id})|"></option>
-            </select>
-            <input type="submit" value="add" />
-        </form>
+        <div class="payload">
+            <div class="page page-short">
+                <h1>Csoport felhasználói</h1>
+                <table>
+                    <tr>
+                        <th>Név</th>
+                        <th class="centered-text">Profil</th>
+                        <th class="centered-text">Kidobás</th>
+                    </tr>
+                    <tr class="group" th:each="user : ${users}" th:object="${user}">
+                        <td th:text="*{name}">user name</td>
+                        <td class="centered-text">
+                            <a href="#" th:href="|@{/user/}*{id}|"><span class="material-icons fix-icons">person</span></a>
+                        </td>
+                        <td class="centered-text">
+                            <form th:action="|@{/admin/group/}${groupId}/user/kick|" method="post">
+                                <input type="hidden" name="userId" th:value="*{id}">
+                                <input type="submit" value="Kidob" />
+                            </form>
+                        </td>
+                    </tr>
+                </table>
+
+                <h2>Felhasználó hozzáadása</h2>
+                <form th:action="|@{/admin/group/}${groupId}/user/add|" method="post" class="card centered-text">
+                    <select name="userId">
+                        <option th:each="opt : ${availableUsers}" th:value="${opt.id}" th:text="|${opt.name} (${opt.id})|"></option>
+                    </select>
+                    <input type="submit" value="Hozzáad" class="ml-2" />
+                </form>
+
+                <a th:href="|@{/admin/group}/${groupId}|" class="btn btn-secondary btn-large">Vissza</a>
+            </div>
+        </div>
     </div>
+</div>
 </body>
 </html>

@@ -1,0 +1,88 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="hu">
+<head th:replace="Layout :: head">
+</head>
+<body>
+<div class="content">
+    <div class="split">
+        <div th:replace="Layout :: mobile"></div>
+        <div th:replace="Layout :: menu(${user})"></div>
+
+        <div class="payload">
+            <div class="page">
+                <h1>Kérelmek</h1>
+
+                <div class="responsive-table-wrapper">
+                    <table>
+                        <tr>
+                            <th>Csoport</th>
+                            <th>Erőforrás</th>
+                            <th>Foglalás időtartama</th>
+                            <th>Státusz</th>
+                            <th>Foglaló</th>
+                            <th style="min-width: 80px"></th>
+                            <th style="min-width: 120px"></th>
+                        </tr>
+                        <tr class="group" th:each="request : ${requests}" th:object="${request}">
+                            <td th:text="*{resource?.ownerGroup?.name ?: 'n/a'}" th:class="${!request.accepted && !request.rejected ? 'warning' : ''}">group name</td>
+
+                            <td th:text="*{resource?.name ?: 'n/a'}" th:class="${!request.accepted && !request.rejected ? 'warning' : 'light'}">resource name</td>
+
+                            <td th:text="|${request.getDateStartString()} - ${request.getDateEndString()}|"
+                                th:class="${!request.accepted && !request.rejected ? 'warning' : ''}">interval</td>
+
+                            <td th:text="${request.accepted ? (request.issued ? (request.closed ? 'visszadva' : 'kiadva') : (request.closed ? 'visszadva' : 'elfogadva')) : (request.rejected ? 'visszautasítva' : 'bírálás alatt')}"
+                                th:class="${request.accepted ? (request.issued ? (request.closed ? 'light' : 'success') : (request.closed ? 'light' : 'success')) : (request.rejected ? 'danger' : 'warning')}"></td>
+
+                            <td th:class="${!request.accepted && !request.rejected ? 'warning' : 'light'}">
+                                <a th:href="|@{/user}/*{borrower?.id ?: 0}|" th:text="*{borrower?.name ?: 'n/a'}"></a>
+                            </td>
+
+                            <td class="right-text">
+
+                                <form th:action="|@{/request}/*{id}/accept|" method="post" class="inline success" th:if="${(request.rejected || !request.accepted) && !request.issued}">
+                                    <input type="hidden" name="userId" th:value="*{id}">
+                                    <button type="submit" class="btn-none"><span class="material-icons fix-icons">done</span></button>
+                                </form>
+
+                                <form th:action="|@{/request}/*{id}/reject|" method="post" class="inline danger" th:if="${(!request.rejected || request.accepted) && !request.issued}">
+                                    <input type="hidden" name="userId" th:value="*{id}">
+                                    <button type="submit" class="btn-none"><span class="material-icons fix-icons">close</span></button>
+                                </form>
+                            </td>
+                            <td class="right-text">
+                                <form th:action="|@{/return}|" method="get" class="inline" th:if="${request.accepted && request.issued}" >
+                                    <button type="submit" class="btn-none"><span class="material-icons fix-icons">assignment_return</span></button>
+                                </form>
+
+                                <a href="#" onclick="alert('Foglaló megjegyzése:\n' + this.dataset.param); return false"
+                                   th:data-param="${request.borrowerComment}"
+                                   th:unless="${request.borrowerComment.isEmpty()}">
+                                    <span class="material-icons fix-icons">comment</span>
+                                </a>
+
+                                <a href="#" th:href="|@{/request/}*{id}|"><span class="material-icons fix-icons">info</span></a>
+
+                                <a href="#" th:href="|@{/resource/}*{resource?.id ?: 0}|"><span class="material-icons fix-icons">inventory_2</span></a>
+                            </td>
+                        </tr>
+                        <tr th:if="${requests.isEmpty()}">
+                            <td colspan="6" class="centered-text">Nincs egyetlen leadott kérelem se</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="card">
+                    <b>Jelmagyarázat</b><br />
+                    <span class="material-icons fix-icons">assignment_return</span>: Kiadás<br />
+                    <span class="material-icons fix-icons">comment</span>: Kérelmező megjegyzése<br />
+                    <span class="material-icons fix-icons">info</span>: Kérelem adatai<br />
+                    <span class="material-icons fix-icons">inventory_2</span>: Erőforrás adatai<br />
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

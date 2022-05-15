@@ -1,37 +1,74 @@
 <!doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="hu">
 <head th:replace="Layout :: head">
-    <meta charset="UTF-8">
-    <title>Will be replaced</title>
 </head>
 <body>
-    <div class="content">
-        <h2>New resource</h2>
-        <form action="#" th:action="|@{/admin/group/}${groupId}/division/${divisionId}/resource|" method="post" th:object="${newResource}">
-            <label for="name">Name</label>
-            <input id="name" type="text" th:field="*{name}" /><br />
+<div class="content">
+    <div class="split">
+        <div th:replace="Layout :: mobile"></div>
+        <div th:replace="Layout :: menu(${user})"></div>
 
-            <label for="division">Division</label>
-            <input id="division" type="text" th:value="${divisionName}" disabled /><br />
+        <div class="payload">
+            <div class="page page-short">
+                <h1>Új erőforrás</h1>
+                <form action="#" th:action="|@{/admin/group/}${groupId}/division/${divisionId}/resource|" method="post" th:object="${newResource}">
+                    <div class="field-group">
+                        <label for="name">Név</label>
+                        <input id="name" type="text" th:field="*{name}" autocomplete="off" />
+                    </div>
 
-            <label for="code">Code</label>
-            <input id="code" type="text" th:field="*{code}" /><br />
+                    <div class="field-group">
+                        <label for="division">Részleg</label>
+                        <input id="division" type="text" th:value="${divisionName}" disabled autocomplete="off" />
+                    </div>
 
-            <label for="description">Description</label>
-            <textarea id="description" th:field="*{description}"></textarea><br />
+                    <div class="field-group">
+                        <label for="code">Kód</label>
+                        <input id="code" type="text" th:field="*{code}" autocomplete="off" />
+                    </div>
 
-            <label for="visible">Visible</label>
-            <input id="visible" type="checkbox" th:field="*{visible}" /><br />
+                    <div class="field-group">
+                        <label for="description">Leírás</label>
+                        <textarea id="description" th:field="*{description}"></textarea>
+                    </div>
 
-            <label for="available">Available</label>
-            <input id="available" type="checkbox" th:field="*{available}" /><br />
+                    <div class="field-group">
+                        <label for="visible">Láthatóság</label>
+                        <div style="clear: both"></div>
 
-            <label for="storageRoom">Storage Room</label>
-            <input id="storageRoom" type="text" th:field="*{storageRoom}" /><br />
+                        <label class="switch">
+                            <input type="checkbox" th:checked="*{visible}" th:name="visible" id="visible" />
+                            <span class="slider"></span>
+                        </label>
+                        <span class="note">Legyen-e látható és elérhető nem admin felhasználóknak is?</span>
+                        <div style="clear: both"></div>
+                    </div>
 
-            <input type="submit" />
-        </form>
+                    <div class="field-group">
+                        <label for="available">Bérelhető</label>
+                        <div style="clear: both"></div>
 
+                        <label class="switch">
+                            <input type="checkbox" th:checked="*{available}" th:name="available" id="available" />
+                            <span class="slider"></span>
+                        </label>
+                        <span class="note">Legyen-e bérelhető?</span>
+                        <div style="clear: both"></div>
+                    </div>
+
+                    <div class="field-group">
+                        <label for="storageRoom">Tároló helyiség</label>
+                        <input id="storageRoom" type="text" th:field="*{storageRoom}" autocomplete="off" />
+                    </div>
+
+                    <div class="field-group">
+                        <input type="submit" value="Mentés" class="btn-large" />
+                        <a th:href="|@{/admin/group/}${groupId}/division|" class="btn btn-secondary btn-large">Vissza</a>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
+</div>
 </body>
 </html>

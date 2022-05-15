@@ -1,15 +1,31 @@
 <!doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="hu">
 <head th:replace="Layout :: head">
-    <meta charset="UTF-8">
-    <title>Will be replaced</title>
 </head>
 <body>
-    <div class="content">
-        <h2>Admin Index</h2>
+<div class="content">
+    <div class="split">
+        <div th:replace="Layout :: mobile"></div>
+        <div th:replace="Layout :: menu(${user})"></div>
 
-        list all the owned groups
+        <div class="payload">
+            <div class="page page-short">
+                <h1>Admin menü</h1>
 
+                <h2>Csoportok</h2>
+                <span class="note mb-2">Azon csoportok listája ahova admin jogosultságod van</span>
+                <table>
+                    <tr class="group" th:each="group : ${groups}" th:object="${group}">
+                        <td th:text="*{name}">group name</td>
+                        <td class="right-text">
+                            <a href="#" th:href="|@{/admin/group/}*{id}|"><span class="material-icons fix-icons">settings</span></a>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
     </div>
+</div>
 </body>
 </html>

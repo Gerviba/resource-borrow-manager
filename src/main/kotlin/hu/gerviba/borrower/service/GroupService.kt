@@ -27,7 +27,7 @@ open class GroupService(
     }
 
     @Transactional(readOnly = true, isolation = Isolation.READ_UNCOMMITTED)
-    open fun listAll(): List<GroupEntity> {
+    open fun getAll(): List<GroupEntity> {
         return groupRepository.findAll()
     }
 
@@ -46,6 +46,11 @@ open class GroupService(
             introduction = group.introduction
             visible = group.visible
         })
+    }
+
+    @Transactional(readOnly = true, isolation = Isolation.READ_UNCOMMITTED)
+    open fun getAllVisible(): List<GroupEntity> {
+        return groupRepository.findAllByVisibleTrue()
     }
 
 }

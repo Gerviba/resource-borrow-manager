@@ -1,25 +1,32 @@
 <!doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="hu">
 <head th:replace="Layout :: head">
-    <meta charset="UTF-8">
-    <title>Will be replaced</title>
 </head>
 <body>
-    <div class="content">
-        <h2>Show users</h2>
-        <table>
-            <tr>
-                <th>Name</th>
-                <th>...</th>
-            </tr>
-            <tr class="group" th:each="user : ${users}" th:object="${user}">
-                <td th:text="*{name}">user name</td>
-                <td>
-                    <a href="#" th:href="|@{/su/user/}*{id}|">edit</a>
-                    <a href="#" th:href="|@{/user/}*{id}|">profile</a>
-                </td>
-            </tr>
-        </table>
+<div class="content">
+    <div class="split">
+        <div th:replace="Layout :: mobile"></div>
+        <div th:replace="Layout :: menu(${user})"></div>
+
+        <div class="payload">
+            <div class="page page-short">
+                <h1>Felhasználók kezelése</h1>
+                <table>
+                    <tr>
+                        <th>Név</th>
+                        <th></th>
+                    </tr>
+                    <tr class="group" th:each="user : ${users}" th:object="${user}">
+                        <td th:text="*{name}">user name</td>
+                        <td class="right-text">
+                            <a href="#" th:href="|@{/su/user/}*{id}|"><span class="material-icons fix-icons">edit</span></a>
+                            <a href="#" th:href="|@{/user/}*{id}|"><span class="material-icons fix-icons">person</span></a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
     </div>
+</div>
 </body>
 </html>

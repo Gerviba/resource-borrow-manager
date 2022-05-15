@@ -1,18 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+<head th:replace="Layout :: head">
 </head>
 <body>
-    <div class="content">
-        <form action="#" th:action="@{/search}" method="get">
-            <input id="query" type="text" name="q" th:value="${query}" />
-        </form>
+<div class="content">
+    <div class="split">
+        <div th:replace="Layout :: mobile"></div>
+        <div th:replace="Layout :: menu(${user})"></div>
 
-        <div th:each="obj : ${results}" th:object="${obj}">
-            <h4 th:text="${obj.name}"></h4>
+        <div class="payload">
+            <div class="page">
+                <div class="short-box">
+                    <form action="#" th:action="@{/search}" method="get">
+                        <label>Keresés</label>
+                        <input id="query" type="text" name="q" th:value="${query}" autocomplete="off" autofocus />
+                    </form>
+                </div>
+
+                <div class="centered-box">
+                    <a th:each="obj : ${results}" th:object="${obj}" href="#" th:href="|@{/resource}/${obj.id}|">
+                        <div class="resource-obj">
+                            <img th:unless="${obj.imageName.isEmpty()}" th:src="|@{/cdn}/*{imageName}|" height="300" width="300">
+                            <img th:if="${obj.imageName.isEmpty()}" th:src="|@{/noimage.png}|" height="300" width="300">
+                            <div class="wrapper">
+                                <h4 th:text="${obj.name}"></h4><span class="badge" th:text="${obj.ownerGroup.name}">AUT</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
+</div>
 </body>
 </html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="Layout :: head">
+</head>
+<body>
+<div class="content">
+    <div class="split">
+        <div th:replace="Layout :: mobile"></div>
+        <div th:replace="Layout :: menu(${user})"></div>
+
+        <div class="payload">
+            <div class="page page-short">
+                <h1>Csoportok</h1>
+
+                <div class="centered-box">
+                    <a th:each="obj : ${groups}" th:object="${obj}" th:href="|@{/group}/${obj.id}|" >
+                        <div class="full-resource-obj">
+                            <div class="wrapper">
+                                <h4 th:text="${obj.longName}"></h4>
+                                <h5 th:text="${obj.name}">AUT</h5>
+                            </div>
+                            <div class="bottom">
+
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

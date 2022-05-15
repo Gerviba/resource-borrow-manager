@@ -7,13 +7,16 @@ import hu.gerviba.borrower.repo.UserRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Isolation
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.ui.Model
 import javax.persistence.EntityNotFoundException
+import javax.servlet.http.HttpServletRequest
 
 @Service
 open class UserService(
     private val userRepository: UserRepository,
     private val groupRepository: GroupRepository,
-    private val divisionRepository: DivisionRepository
+    private val divisionRepository: DivisionRepository,
+    private val resourceService: ResourceService
 ) {
 
     @Transactional(readOnly = true, isolation = Isolation.READ_UNCOMMITTED)
@@ -94,6 +97,14 @@ open class UserService(
         userRepository.save(userRepository.getById(userId).apply {
             divisions.removeIf { it.id == divisionId }
         })
+    }
+
+    @Transactional(readOnly = true, isolation = Isolation.READ_UNCOMMITTED)
+    open fun addDefaultFields(model: Model, httpServletRequest: HttpServletRequest) {
+        val user = userRepository.findAll()[0] // FIXME: remove mocking
+        model.addAttribute("user", user)
+        model.addAttribute("groupMember", user.groups.isNotEmpty())
+        model.addAttribute("requestCount", resourceService.getNotAcceptedBookingsHandledByUserNotTransactional(user).size)
     }
 
 }

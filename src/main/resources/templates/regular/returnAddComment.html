@@ -1,0 +1,34 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="hu">
+<head th:replace="Layout :: head">
+</head>
+<body>
+<div class="content">
+    <div class="split">
+        <div th:replace="Layout :: mobile"></div>
+        <div th:replace="Layout :: menu(${user})"></div>
+
+        <div class="payload">
+            <div class="page page-short">
+                <h1>Visszavétel Sikeres</h1>
+
+                <h2 class="centered-text"><span th:text="${resourceName}" class="success"></span> sikeresen visszavéve!</h2>
+
+                <form action="#" th:action="|@{/return/add-comment}/${bookingId}|" method="post">
+                    <div class="field-group">
+                        <label for="comment">Megjegyzés a visszavételhez</label>
+                        <textarea id="comment" name="comment"></textarea>
+                    </div>
+                    <div class="field-group">
+                        <input type="submit" value="Hozzáfűz" class="btn btn-large" />
+                        <a href="#" th:href="@{/return}" class="btn btn-secondary btn-large">Más visszavétele</a>
+                        <a href="#" th:href="@{/requests}" class="btn btn-secondary btn-large">Kérelmek</a>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

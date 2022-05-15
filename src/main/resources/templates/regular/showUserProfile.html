@@ -1,37 +1,44 @@
 <!doctype html>
-<!--suppress HtmlRequiredTitleElement -->
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="hu">
 <head th:replace="Layout :: head">
 </head>
 <body>
-    <div class="content" th:object="${user}">
-        <h2 th:text="*{name}">User Name</h2>
+<div class="content">
+    <div class="split">
+        <div th:replace="Layout :: mobile"></div>
+        <div th:replace="Layout :: menu(${user})"></div>
 
-        <table>
-            <tr>
-                <td>email</td>
-                <td th:text="*{email}"></td>
-            </tr>
-            <tr>
-                <td>teams</td>
-                <td th:text="*{teams}"></td>
-            </tr>
-            <tr>
-                <td>room</td>
-                <td th:text="*{room}"></td>
-            </tr>
-            <tr>
-                <td>mobile</td>
-                <td th:text="*{mobile}"></td>
-            </tr>
-            <tr>
-                <td>groups</td>
-                <td>
-                    <div th:each="group : *{groups}" th:text="${group.name}"></div>
-                </td>
-            </tr>
-        </table>
+        <div class="payload">
+            <div class="page page-short" th:object="${actualUser}">
+                <h1 th:text="*{name}">User Name</h1>
 
+                <table>
+                    <tr>
+                        <td>E-mail cím</td>
+                        <td th:text="*{email}" class="light"></td>
+                    </tr>
+                    <tr>
+                        <td>Teams eléretőség</td>
+                        <td th:text="*{teams}" class="light"></td>
+                    </tr>
+                    <tr>
+                        <td>Szoba</td>
+                        <td th:text="*{room}" class="light"></td>
+                    </tr>
+                    <tr>
+                        <td>Telefonszám</td>
+                        <td th:text="*{mobile}" class="light"></td>
+                    </tr>
+                    <tr>
+                        <td>Csoport tagságok</td>
+                        <td class="light">
+                            <div th:each="group : *{groups}" th:text="${group.name}"></div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
     </div>
+</div>
 </body>
 </html>

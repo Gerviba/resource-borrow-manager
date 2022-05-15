@@ -1,27 +1,49 @@
 <!doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="hu">
 <head th:replace="Layout :: head">
-    <meta charset="UTF-8">
-    <title>Will be replaced</title>
 </head>
 <body>
-    <div class="content">
-        <h2>Edit group</h2>
-        <form action="#" th:action="|@{/admin/group/}${groupId}/division/${division.id}/edit|" method="post" th:object="${division}">
-            <input type="hidden" th:field="*{id}" />
+<div class="content">
+    <div class="split">
+        <div th:replace="Layout :: mobile"></div>
+        <div th:replace="Layout :: menu(${user})"></div>
 
-            <label for="name">Name</label>
-            <input id="name" type="text" th:field="*{name}" /><br />
+        <div class="payload">
+            <div class="page page-short">
+                <h1>Csoport szerkesztése</h1>
+                <form action="#" th:action="|@{/admin/group/}${groupId}/division/${division.id}/edit|" method="post" th:object="${division}">
+                    <input type="hidden" th:field="*{id}" />
 
-            <label for="introduction">Introduction</label>
-            <textarea id="introduction" th:field="*{introduction}"></textarea><br />
+                    <div class="field-group">
+                        <label for="name">Név</label>
+                        <input id="name" type="text" th:field="*{name}" />
+                    </div>
 
-            <label for="visible">Visibility</label>
-            <input id="visible" type="checkbox" th:field="*{visible}" /><br />
+                    <div class="field-group">
+                        <label for="introduction">Bemutatkozás</label>
+                        <textarea id="introduction" th:field="*{introduction}"></textarea>
+                    </div>
 
-            <input type="submit" />
-        </form>
+                    <div class="field-group">
+                        <label for="visible">Láthatóság</label>
+                        <div style="clear: both"></div>
 
+                        <label class="switch">
+                            <input type="checkbox" th:checked="*{visible}" th:name="visible" id="visible" />
+                            <span class="slider"></span>
+                        </label>
+                        <span class="note">Legyen-e látható és elérhető nem admin felhasználóknak is?</span>
+                        <div style="clear: both"></div>
+                    </div>
+
+                    <div class="field-group">
+                        <input type="submit" value="Mentés" class="btn-large" />
+                        <a th:href="|@{/admin/group/}${groupId}/divisions|" class="btn btn-secondary btn-large">Vissza</a>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
+</div>
 </body>
 </html>

@@ -1,0 +1,56 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="hu">
+<head th:replace="Layout :: head">
+</head>
+<body>
+<div class="content">
+    <div class="split">
+        <div th:replace="Layout :: mobile"></div>
+        <div th:replace="Layout :: menu(${user})"></div>
+
+        <div class="payload">
+            <div class="page page-short">
+                <h1>Profil szerkesztése</h1>
+                <form action="#" th:action="@{/profile/edit}" method="post" th:object="${user}">
+                    <input type="hidden" th:field="*{id}" />
+
+                    <div class="field-group">
+                        <label for="name">Név</label>
+                        <input id="name" type="text" th:field="*{name}" autocomplete="off" disabled />
+                    </div>
+
+                    <div class="field-group">
+                        <label for="email">Email</label>
+                        <input id="email" type="text" th:field="*{email}" autocomplete="off" />
+                    </div>
+
+                    <div class="field-group">
+                        <label for="neptun">Neptun</label>
+                        <input id="neptun" type="text" th:field="*{neptun}" autocomplete="off" />
+                    </div>
+
+                    <div class="field-group">
+                        <label for="teams">Teams elérhetőség</label>
+                        <input id="teams" type="text" th:field="*{teams}" autocomplete="off" />
+                    </div>
+
+                    <div class="field-group">
+                        <label for="room">Szoba</label>
+                        <input id="room" type="text" th:field="*{room}" autocomplete="off" />
+                    </div>
+
+                    <div class="field-group">
+                        <label for="mobile">Mobile</label>
+                        <input id="mobile" type="text" th:field="*{mobile}" autocomplete="off" />
+                    </div>
+
+                    <div class="field-group">
+                        <input type="submit" value="Mentés" class="btn-large" />
+                        <a th:href="@{/profile}" class="btn btn-secondary btn-large">Vissza</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="hu">
+<head th:replace="Layout :: head">
+</head>
+<body>
+<div class="content">
+    <div class="split">
+        <div th:replace="Layout :: mobile"></div>
+        <div th:replace="Layout :: menu(${user})"></div>
+
+        <div class="payload">
+            <div class="page page-short" th:object="${user}">
+                <h1>Profil</h1>
+
+                <table>
+                    <tr>
+                        <td>Név</td>
+                        <td th:text="*{name}" class="warning"></td>
+                    </tr>
+                    <tr>
+                        <td>E-mail cím</td>
+                        <td th:text="*{email}" class="light"></td>
+                    </tr>
+                    <tr>
+                        <td>Teams eléretőség</td>
+                        <td th:text="*{teams}" class="light"></td>
+                    </tr>
+                    <tr>
+                        <td>Szoba</td>
+                        <td th:text="*{room}" class="light"></td>
+                    </tr>
+                    <tr>
+                        <td>NEPTUN</td>
+                        <td th:text="*{neptun}" class="light"></td>
+                    </tr>
+                    <tr>
+                        <td>Telefonszám</td>
+                        <td th:text="*{mobile}" class="light"></td>
+                    </tr>
+                    <tr>
+                        <td>Csoport tagságok</td>
+                        <td class="light">
+                            <div th:each="group : *{groups}" th:text="${group.name}"></div>
+                        </td>
+                    </tr>
+                </table>
+
+                <a href="#" th:href="|@{/profile/edit}|" class="btn btn-secondary btn-large">Szerkesztés</a>
+                <a href="#" th:href="|@{/requests}|" class="btn btn-secondary btn-large">Foglalásaim</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

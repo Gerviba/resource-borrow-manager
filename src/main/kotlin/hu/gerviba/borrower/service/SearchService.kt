@@ -39,20 +39,15 @@ open class SearchService(
                 else -> "${it}~3"
             }}
 
-        println(queryString)
-
-//            .onFields("name", "ownerGroup.name", "maintainerDivisions.name")
-//            .matching(queryString)
-//            .filter { it.visible }
-
         return Search.session(entityManager)
             .search(ResourceEntity::class.java)
             .where { it.simpleQueryString()
                 .fields("name", "ownerGroup.name", "maintainerDivisions.name")
                 .matching(queryString)
             }
-            .fetchHits(20)
+            .fetchAllHits()
             .filterIsInstance(ResourceEntity::class.java)
+            .filter { it.visible }
     }
 
 }
