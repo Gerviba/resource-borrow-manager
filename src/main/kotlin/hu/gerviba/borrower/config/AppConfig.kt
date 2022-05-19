@@ -12,4 +12,10 @@ class AppConfig(
     var uploadPath: String = "/etc/app/external",
     var qrSize: Int = 360,
     var appBaseUrl: String = "http://127.0.0.1:8080",
-)
+    var userInfoUri: String = "https://auth.sch.bme.hu/api/profile"
+) {
+
+    override fun toString(): String {
+        return "AppConfig(generatedIdLength=$generatedIdLength, testingMode=$testingMode, qrGenerationTarget='$qrGenerationTarget', uploadPath='$uploadPath', qrSize=$qrSize, appBaseUrl='$appBaseUrl', userInfoUri='$userInfoUri')"
+    }
+}

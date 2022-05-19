@@ -35,28 +35,40 @@
                 <a href="#" th:href="@{/}"><span class="material-icons fix-icons">home</span> Kezdőlap</a>
                 <a href="#" th:href="@{/search}"><span class="material-icons fix-icons">search</span> Erőforrások</a>
                 <a href="#" th:href="@{/identify}"><span class="material-icons fix-icons">qr_code_scanner</span> Beazonosítás</a>
-                <a href="#" th:href="@{/groups}"><span class="material-icons fix-icons">group</span> Csoportok</a>
+                <a href="#" th:href="@{/groups}" th:if="${userEntity != null && userEntity.isRegular()}"><span class="material-icons fix-icons">group</span> Csoportok</a>
 
-                <h2>Felhasználói</h2>
-                <a href="#" th:href="@{/profile}"><span class="material-icons fix-icons">home</span> Profil</a>
-                <a href="#" th:href="@{/profile/requests}"><span class="material-icons fix-icons">event</span> Foglalásaim</a>
-                <a href="#" th:href="@{/receive}"><span class="material-icons fix-icons">qr_code</span> Átvétel</a>
+                <object th:remove="tag" th:if="${userEntity != null && userEntity.isRegular()}">
+                    <h2>Felhasználói</h2>
+                    <a href="#" th:href="@{/profile}"><span class="material-icons fix-icons">account_circle</span> <ins th:remove="tag" th:text="${userEntity.name}"></ins></a>
+                    <a href="#" th:href="@{/profile/requests}"><span class="material-icons fix-icons">event</span> Foglalásaim</a>
+                    <a href="#" th:href="@{/receive}"><span class="material-icons fix-icons">qr_code</span> Átvétel</a>
+                </object>
 
-                <h2>Csoport</h2>
-                <a href="#" th:href="@{/requests}"><span class="material-icons fix-icons">free_cancellation</span> Kérelmek
-                    <ins class="danger-badge" th:if="${requestCount != null && requestCount > 0}" th:text="${requestCount > 20 ? '20+' : requestCount}">20+</ins>
-                </a>
-                <a href="#" th:href="@{/return}"><span class="material-icons fix-icons">assignment_return</span> Visszavétel</a>
-                <a href="#" th:href="@{/inventory}"><span class="material-icons fix-icons">fact_check</span> Leltárazás</a>
+                <object th:remove="tag" th:if="${userEntity != null && userEntity.hasDivisions()}">
+                    <h2>Csoport</h2>
+                    <a href="#" th:href="@{/requests}"><span class="material-icons fix-icons">free_cancellation</span> Kérelmek
+                        <ins class="danger-badge" th:if="${requestCount != null && requestCount > 0}" th:text="${requestCount > 20 ? '20+' : requestCount}">20+</ins>
+                    </a>
+                    <a href="#" th:href="@{/return}"><span class="material-icons fix-icons">assignment_return</span> Visszavétel</a>
+                    <a href="#" th:href="@{/inventory}"><span class="material-icons fix-icons">fact_check</span> Leltárazás</a>
+                </object>
 
-                <h2>Adminisztráció</h2>
-                <a href="#" th:href="@{/admin}"><span class="material-icons fix-icons">settings</span> Admin menü</a>
-                <a href="#" th:href="@{/su/groups}"><span class="material-icons fix-icons">star</span> Csoportok kezelése</a>
-                <a href="#" th:href="@{/su/users}"><span class="material-icons fix-icons">star</span> Felhasználók kezelése</a>
+                <object th:remove="tag" th:if="${userEntity != null && userEntity.isAdmin()}">
+                    <h2>Adminisztráció</h2>
+                    <a href="#" th:href="@{/admin}"><span class="material-icons fix-icons">settings</span> Admin menü</a>
+                    <a href="#" th:href="@{/su/groups}" th:if="${userEntity != null && userEntity.isSuperuser()}"><span class="material-icons fix-icons">star</span> Csoportok kezelése</a>
+                    <a href="#" th:href="@{/su/users}" th:if="${userEntity != null && userEntity.isSuperuser()}"><span class="material-icons fix-icons">star</span> Felhasználók kezelése</a>
+                </object>
+
+                <object th:remove="tag" th:if="${testingMode != null && testingMode}">
+                    <h2>Teszt</h2>
+                    <a href="#" th:href="@{/testing}"><span class="material-icons fix-icons">report</span> Teszt menü</a>
+                </object>
 
                 <div class="separate"></div>
 
-                <a href="#" th:href="@{/control/logout}"><span class="material-icons fix-icons">logout</span> Kijelentkezés</a>
+                <a href="#" th:href="@{/oauth2/authorization/authsch}" th:if="${userEntity == null || !userEntity.isRegular()}"><span class="material-icons fix-icons">login</span> Bejelentkezés</a>
+                <a href="#" th:href="@{/control/logout}" th:if="${userEntity != null && userEntity.isRegular()}"><span class="material-icons fix-icons">logout</span> Kijelentkezés</a>
 
                 <div class="separate"></div>
             </div>

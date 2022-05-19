@@ -21,7 +21,7 @@
                     <tr class="group" th:each="resource : ${resources}" th:object="${resource}">
                         <td th:text="*{name}">resource name</td>
                         <td class="right-text">
-                            <a href="#" th:href="|@{/resource/}*{id}|"><span class="material-icons fix-icons">inventory_2</span></a>
+                            <a href="#" th:href="|@{/res/}*{id}|"><span class="material-icons fix-icons">inventory_2</span></a>
                         </td>
                     </tr>
                 </table>

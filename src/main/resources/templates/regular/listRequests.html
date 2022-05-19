@@ -63,11 +63,11 @@
 
                                 <a href="#" th:href="|@{/request/}*{id}|"><span class="material-icons fix-icons">info</span></a>
 
-                                <a href="#" th:href="|@{/resource/}*{resource?.id ?: 0}|"><span class="material-icons fix-icons">inventory_2</span></a>
+                                <a href="#" th:href="|@{/res/}*{resource?.id ?: 0}|"><span class="material-icons fix-icons">inventory_2</span></a>
                             </td>
                         </tr>
                         <tr th:if="${requests.isEmpty()}">
-                            <td colspan="6" class="centered-text">Nincs egyetlen leadott kérelem se</td>
+                            <td colspan="7" class="centered-text">Nincs egyetlen leadott kérelem se</td>
                         </tr>
                     </table>
                 </div>

@@ -18,7 +18,7 @@
                 </div>
 
                 <div class="centered-box">
-                    <a th:each="obj : ${results}" th:object="${obj}" href="#" th:href="|@{/resource}/${obj.id}|">
+                    <a th:each="obj : ${results}" th:object="${obj}" href="#" th:href="|@{/res}/${obj.id}|">
                         <div class="resource-obj">
                             <img th:unless="${obj.imageName.isEmpty()}" th:src="|@{/cdn}/*{imageName}|" height="300" width="300">
                             <img th:if="${obj.imageName.isEmpty()}" th:src="|@{/noimage.png}|" height="300" width="300">

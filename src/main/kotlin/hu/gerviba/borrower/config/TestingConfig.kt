@@ -4,12 +4,14 @@ import hu.gerviba.borrower.model.*
 import hu.gerviba.borrower.repo.*
 import hu.gerviba.borrower.service.QRCodeGeneratorService
 import hu.gerviba.borrower.service.TimeService
+import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Isolation
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 import javax.annotation.PostConstruct
 
+@Profile("test")
 @Service
 class TestingConfig(
     val groupRepository: GroupRepository,

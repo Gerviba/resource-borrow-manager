@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="Layout :: head">
+</head>
+<body>
+<div class="content">
+    <div class="split">
+        <div th:replace="Layout :: mobile"></div>
+        <div th:replace="Layout :: menu(${user})"></div>
+
+        <div class="payload">
+            <div class="page page-short">
+                <h1>Üdv <b th:text="${user.name}"></b>!</h1>
+
+                <p>Sikeresen bejelentkeztél! A hozzáférési szinted: <b th:text="${user.role.name}"></b> <br />Ha szeretnéd megváltoztatni vedd fel a kapcsolatot egy adminnal!</p>
+
+                <div class="card" th:if="${testingMode != null && testingMode}">
+                    Mivel a teszt mód be van kapcsolva, ezért használhatod hozzáférési szint változtatásra a teszt menüt is!
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

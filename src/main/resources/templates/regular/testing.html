@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="Layout :: head">
+</head>
+<body>
+<div class="content">
+    <div class="split">
+        <div th:replace="Layout :: mobile"></div>
+        <div th:replace="Layout :: menu(${user})"></div>
+
+        <div class="payload">
+            <div class="page page-short">
+                <h1>TESZT MENÜ</h1>
+
+                <p class="warning">
+                    Demo és debug céllal készült menü! Ha ki akarod kapcsolni, vedd ki a <b>test</b> profilt az
+                    indítási paraméterek közül vagy állítsd a <b>hu.borrower.config.testingMode</b> propertyt hamisra!
+                </p>
+
+                <h2>Role állítás</h2>
+                <form th:action="@{/testing}" method="post">
+                    <select id="role" name="role">
+                        <option th:each="opt : ${T(hu.gerviba.borrower.model.UserRole).values()}" th:value="${opt}" th:text="${opt.name()}"></option>
+                    </select>&nbsp;
+                    <input type="submit" value="Mentés" class="btn-large" />
+                </form>
+
+                <p class="danger">
+                    Az átállítás után relogolni kell, hogy életbe lépje az új role!
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

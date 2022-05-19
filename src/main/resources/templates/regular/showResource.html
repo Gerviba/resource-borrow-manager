@@ -68,15 +68,12 @@
                 </div>
                 <p th:if="${bookings.isEmpty()}">Nincs elérhető korábbi foglalás</p>
 
-                <h2>Lehetőségek</h2>
-                <a href="#" th:href="|@{/resource}/${resource.id}/request|" class="btn btn-secondary btn-large" th:if="${resource.available}">Lefoglalás</a>
-                <a href="#" th:href="|@{/resource}/${resource.id}/history|" class="btn btn-secondary btn-large">Régbbi foglalások</a>
+                <h2 th:if="${user != null && user.isRegular()}">Lehetőségek</h2>
+                <a href="#" th:if="${user != null && user.isRegular() && resource.available}" th:href="|@{/resource}/${resource.id}/request|" class="btn btn-secondary btn-large">Lefoglalás</a>
+                <a href="#" th:if="${user != null && user.isRegular()}" th:href="|@{/resource}/${resource.id}/history|" class="btn btn-secondary btn-large">Régbbi foglalások</a>
 
-                <!-- admin -->
-                <a href="#" th:href="|@{/admin/group}/${resource.ownerGroup?.id}/resource/${resource.id}/edit|" class="btn btn-secondary btn-large">Szerkesztés</a><br />
-
-                <h2>QR Kód</h2>
-                <table>
+                <h2 th:if="${user != null && user.isRegular()}">QR Kód</h2>
+                <table th:if="${user != null && user.isRegular()}">
                     <tr>
                         <td class="centered-text">
                             <a th:href="|/cdn/codes/${resource.id}.png|" target="_blank">

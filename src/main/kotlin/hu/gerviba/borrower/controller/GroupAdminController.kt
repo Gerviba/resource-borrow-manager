@@ -5,6 +5,7 @@ import hu.gerviba.borrower.model.DivisionEntity
 import hu.gerviba.borrower.model.GroupEntity
 import hu.gerviba.borrower.model.ResourceEntity
 import hu.gerviba.borrower.service.*
+import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
@@ -25,26 +26,26 @@ class GroupAdminController(
 ) {
 
     @GetMapping("")
-    fun adminIndex(model: Model, httpServletRequest: HttpServletRequest): String {
-        model.addAttribute("groups", groupService.getAll()) // FIXME: getAll that is owned by current user
-        userService.addDefaultFields(model, httpServletRequest)
+    fun adminIndex(model: Model, authentication: Authentication): String {
+        val user = userService.addDefaultFields(model, authentication)
+        model.addAttribute("groups", user.groups)
         return "admin/adminIndex"
     }
 
     @GetMapping("/group/{groupId}/divisions")
-    fun listDivisions(@PathVariable groupId: Int, model: Model, httpServletRequest: HttpServletRequest): String {
+    fun listDivisions(@PathVariable groupId: Int, model: Model, authentication: Authentication): String {
         model.addAttribute("groupId", groupId)
         model.addAttribute("divisions", divisionService.listAllOfGroup(groupId))
-        userService.addDefaultFields(model, httpServletRequest)
+        userService.addDefaultFields(model, authentication)
         return "admin/showDivisions"
     }
 
     /// DIVISIONS
 
     @GetMapping("/group/{groupId}")
-    fun index(@PathVariable groupId: Int, model: Model, httpServletRequest: HttpServletRequest): String {
+    fun index(@PathVariable groupId: Int, model: Model, authentication: Authentication): String {
         model.addAttribute("group", groupService.getGroup(groupId))
-        userService.addDefaultFields(model, httpServletRequest)
+        userService.addDefaultFields(model, authentication)
         return "admin/showGroup"
     }
 
@@ -53,11 +54,11 @@ class GroupAdminController(
         @PathVariable groupId: Int,
         @PathVariable divisionId: Int,
         model: Model,
-        httpServletRequest: HttpServletRequest
+        authentication: Authentication
     ): String {
         model.addAttribute("groupId", groupId)
         model.addAttribute("division", divisionService.getDivision(divisionId))
-        userService.addDefaultFields(model, httpServletRequest)
+        userService.addDefaultFields(model, authentication)
         return "admin/editDivision"
     }
 
@@ -66,17 +67,17 @@ class GroupAdminController(
         @PathVariable groupId: Int,
         @PathVariable divisionId: Int,
         @ModelAttribute division: DivisionEntity,
-        httpServletRequest: HttpServletRequest
+        authentication: Authentication
     ): String {
         divisionService.updateDivision(division.id, division)
         return "redirect:/admin/group/${groupId}/divisions"
     }
 
     @GetMapping("/group/{groupId}/division")
-    fun createDivision(@PathVariable groupId: Int, model: Model, httpServletRequest: HttpServletRequest): String {
+    fun createDivision(@PathVariable groupId: Int, model: Model, authentication: Authentication): String {
         model.addAttribute("groupId", groupId)
         model.addAttribute("newDivision", GroupEntity())
-        userService.addDefaultFields(model, httpServletRequest)
+        userService.addDefaultFields(model, authentication)
         return "admin/createDivision"
     }
 
@@ -84,7 +85,7 @@ class GroupAdminController(
     fun createDivisionFormTarget(
         @PathVariable groupId: Int,
         @ModelAttribute division: DivisionEntity,
-        httpServletRequest: HttpServletRequest
+        authentication: Authentication
     ): String {
         divisionService.createDivision(division, groupId)
         return "redirect:/admin/group/${groupId}/divisions"
@@ -95,21 +96,21 @@ class GroupAdminController(
         @PathVariable groupId: Int,
         @PathVariable divisionId: Int,
         model: Model,
-        httpServletRequest: HttpServletRequest
+        authentication: Authentication
     ): String {
         model.addAttribute("groupId", groupId)
         model.addAttribute("resources", resourceService.getAllForDivision(divisionId))
-        userService.addDefaultFields(model, httpServletRequest)
+        userService.addDefaultFields(model, authentication)
         return "admin/showResources"
     }
 
     /// RESOURCES
 
     @GetMapping("/group/{groupId}/resources")
-    fun listResources(@PathVariable groupId: Int, model: Model, httpServletRequest: HttpServletRequest): String {
+    fun listResources(@PathVariable groupId: Int, model: Model, authentication: Authentication): String {
         model.addAttribute("groupId", groupId)
         model.addAttribute("resources", resourceService.getAllOfGroup(groupId))
-        userService.addDefaultFields(model, httpServletRequest)
+        userService.addDefaultFields(model, authentication)
         return "admin/showResources"
     }
 
@@ -118,11 +119,11 @@ class GroupAdminController(
         @PathVariable groupId: Int,
         @PathVariable resourceId: Int,
         model: Model,
-        httpServletRequest: HttpServletRequest
+        authentication: Authentication
     ): String {
         model.addAttribute("groupId", groupId)
         model.addAttribute("resource", resourceService.getResource(resourceId))
-        userService.addDefaultFields(model, httpServletRequest)
+        userService.addDefaultFields(model, authentication)
         return "admin/editResource"
     }
 
@@ -131,7 +132,7 @@ class GroupAdminController(
         @ModelAttribute resource: ResourceEntity,
         @PathVariable resourceId: Int,
         @PathVariable groupId: String,
-        httpServletRequest: HttpServletRequest,
+        authentication: Authentication,
         @RequestParam(required = false) file: MultipartFile?
     ): String {
         file?.uploadFile("resource")?.let { fileName -> resource.imageName = "resource/$fileName" }
@@ -140,10 +141,10 @@ class GroupAdminController(
     }
 
     @GetMapping("/group/{groupId}/resource")
-    fun createResource(@PathVariable groupId: Int, model: Model, httpServletRequest: HttpServletRequest): String {
+    fun createResource(@PathVariable groupId: Int, model: Model, authentication: Authentication): String {
         model.addAttribute("groupId", groupId)
         model.addAttribute("newResource", ResourceEntity())
-        userService.addDefaultFields(model, httpServletRequest)
+        userService.addDefaultFields(model, authentication)
         return "admin/createResource"
     }
 
@@ -151,7 +152,7 @@ class GroupAdminController(
     fun createResourceFormTarget(
         @PathVariable groupId: Int,
         @ModelAttribute resource: ResourceEntity,
-        httpServletRequest: HttpServletRequest,
+        authentication: Authentication,
         @RequestParam(required = false) file: MultipartFile?
     ): String {
         file?.uploadFile("resource")?.let { fileName -> resource.imageName = "resource/$fileName" }
@@ -164,13 +165,13 @@ class GroupAdminController(
         @PathVariable groupId: Int,
         @PathVariable divisionId: Int,
         model: Model,
-        httpServletRequest: HttpServletRequest
+        authentication: Authentication
     ): String {
         model.addAttribute("groupId", groupId)
         model.addAttribute("divisionId", divisionId)
         model.addAttribute("divisionName", divisionService.getDivision(divisionId).name)
         model.addAttribute("newResource", ResourceEntity())
-        userService.addDefaultFields(model, httpServletRequest)
+        userService.addDefaultFields(model, authentication)
         return "admin/createResourceForDivision"
     }
 
@@ -179,7 +180,7 @@ class GroupAdminController(
         @PathVariable groupId: Int,
         @PathVariable divisionId: Int,
         @ModelAttribute resource: ResourceEntity,
-        httpServletRequest: HttpServletRequest
+        authentication: Authentication
     ): String {
         resourceService.createResourceAndAttach(resource, groupId, divisionId)
         return "redirect:/admin/group/${groupId}/division/${divisionId}/resources"
@@ -190,14 +191,14 @@ class GroupAdminController(
         @PathVariable groupId: Int,
         @PathVariable resourceId: Int,
         model: Model,
-        httpServletRequest: HttpServletRequest
+        authentication: Authentication
     ): String {
         model.addAttribute("groupId", groupId)
         model.addAttribute("resourceId", resourceId)
         val maintainerDivisions = resourceService.getMaintainersOfResource(resourceId)
         model.addAttribute("ownerDivisions", maintainerDivisions)
         model.addAttribute("availableDivisions", divisionService.listAllOfGroup(groupId).filter { !maintainerDivisions.contains(it) })
-        userService.addDefaultFields(model, httpServletRequest)
+        userService.addDefaultFields(model, authentication)
         return "admin/accessResource"
     }
 
@@ -206,7 +207,7 @@ class GroupAdminController(
         @PathVariable groupId: Int,
         @PathVariable resourceId: Int,
         @RequestParam id: Int,
-        httpServletRequest: HttpServletRequest
+        authentication: Authentication
     ): String {
         resourceService.grantAccessToDivision(resourceId, id)
         return "redirect:/admin/group/${groupId}/resource/${resourceId}/access"
@@ -217,7 +218,7 @@ class GroupAdminController(
         @PathVariable groupId: Int,
         @PathVariable resourceId: Int,
         @RequestParam id: Int,
-        httpServletRequest: HttpServletRequest
+        authentication: Authentication
     ): String {
         resourceService.revokeAccessFromDivision(resourceId, id)
         return "redirect:/admin/group/${groupId}/resource/${resourceId}/access"
@@ -243,22 +244,22 @@ class GroupAdminController(
     /// USERS
 
     @GetMapping("/group/{groupId}/users")
-    fun users(@PathVariable groupId: Int, model: Model, httpServletRequest: HttpServletRequest): String {
+    fun users(@PathVariable groupId: Int, model: Model, authentication: Authentication): String {
         val users = userService.getAllFromGroup(groupId)
         model.addAttribute("users", users)
         model.addAttribute("availableUsers", userService.getAllUsers().filter { !users.contains(it) })
-        userService.addDefaultFields(model, httpServletRequest)
+        userService.addDefaultFields(model, authentication)
         return "admin/showUsersOfGroup"
     }
 
     @PostMapping("/group/{groupId}/user/add")
-    fun addUser(@PathVariable groupId: Int, @RequestParam userId: Int, httpServletRequest: HttpServletRequest): String {
+    fun addUser(@PathVariable groupId: Int, @RequestParam userId: Int, authentication: Authentication): String {
         userService.addUserToGroup(userId, groupId)
         return "redirect:/admin/group/${groupId}/users"
     }
 
     @PostMapping("/group/{groupId}/user/kick")
-    fun kickUser(@PathVariable groupId: Int, @RequestParam userId: Int, httpServletRequest: HttpServletRequest): String {
+    fun kickUser(@PathVariable groupId: Int, @RequestParam userId: Int, authentication: Authentication): String {
         userService.kickUserOutOfGroup(userId, groupId)
         return "redirect:/admin/group/${groupId}/users"
     }
@@ -268,13 +269,13 @@ class GroupAdminController(
         @PathVariable groupId: Int,
         @PathVariable divisionId: Int,
         model: Model,
-        httpServletRequest: HttpServletRequest
+        authentication: Authentication
     ): String {
         val users = userService.getAllFromDivision(divisionId)
         model.addAttribute("users", users)
         model.addAttribute("divisionName", divisionService.getDivision(divisionId).name)
         model.addAttribute("availableUsers", userService.getAllFromGroup(groupId).filter { !users.contains(it) })
-        userService.addDefaultFields(model, httpServletRequest)
+        userService.addDefaultFields(model, authentication)
         return "admin/showUsersOfDivision"
     }
 
@@ -283,7 +284,7 @@ class GroupAdminController(
         @PathVariable groupId: Int,
         @PathVariable divisionId: Int,
         @RequestParam userId: Int,
-        httpServletRequest: HttpServletRequest
+        authentication: Authentication
     ): String {
         userService.addUserToDivision(userId, divisionId)
         return "redirect:/admin/group/${groupId}/division/${divisionId}/users"
@@ -294,7 +295,7 @@ class GroupAdminController(
         @PathVariable groupId: Int,
         @PathVariable divisionId: Int,
         @RequestParam userId: Int,
-        httpServletRequest: HttpServletRequest
+        authentication: Authentication
     ): String {
         userService.kickUserOutOfDivision(userId, divisionId)
         return "redirect:/admin/group/${groupId}/division/${divisionId}/users"

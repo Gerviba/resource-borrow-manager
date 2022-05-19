@@ -69,7 +69,11 @@ class UserEntity(
         return this::class.simpleName + "(id = $id )"
     }
 
+    fun isRegular() = role == UserRole.REGULAR || role == UserRole.ADMIN || role == UserRole.SUPERUSER
+
     fun isAdmin() = role == UserRole.ADMIN || role == UserRole.SUPERUSER
+
+    fun isSuperuser() = role == UserRole.SUPERUSER
 
     fun hasDivisions() = divisions.isNotEmpty()
 
