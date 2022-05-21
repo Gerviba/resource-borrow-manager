@@ -52,7 +52,7 @@
                     </div>
 
                     <div class="field-group">
-                        <input type="submit" value="Lefoglal" class="btn-large" />
+                        <input type="submit" value="Lefoglal" class="btn-large" id="submit-button" />
                         <a th:href="|@{/res}/${resourceId}|" class="btn btn-secondary btn-large">Vissza</a>
                     </div>
                 </form>
@@ -68,6 +68,7 @@
         const requests = JSON.parse(await httpFetchData('GET', `/resource/${resourceId}/available/${from}/${to}`));
         document.getElementById('locked-message').style.display = requests.length === 0 ? 'none' : 'block';
         document.getElementById('invalid-range-message').style.display = from >= to ? 'block' : 'none';
+        document.getElementById('submit-button').disabled = requests.length === 0 && from >= to;
     }
 
     async function httpFetchData(method = 'POST', url = '', data = {}) {

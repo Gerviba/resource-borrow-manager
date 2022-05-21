@@ -1,13 +1,11 @@
 package hu.gerviba.borrower.service
 
-import hu.gerviba.borrower.model.DivisionEntity
 import hu.gerviba.borrower.model.GroupEntity
 import hu.gerviba.borrower.repo.GroupRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Isolation
 import org.springframework.transaction.annotation.Transactional
 import javax.persistence.EntityNotFoundException
-import kotlin.jvm.Throws
 
 @Service
 open class GroupService(

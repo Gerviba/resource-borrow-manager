@@ -117,16 +117,6 @@ class RegularController(
         return "regular/resourceHistory"
     }
 
-    @GetMapping("/receive/confirm/{codeBase64}")
-    fun receiveResource(@PathVariable codeBase64: String, authentication: Authentication): String {
-        val code = resolveCode(codeBase64)
-
-        val user = userService.getAllUsers()[0]
-        return resourceService.receiveResource(user, code)
-            .map { resource -> "redirect:/resource-received/${resource.id}" }
-            .orElse("redirect:/resource-received/0")
-    }
-
     @GetMapping("/receive")
     fun receiveBooking(model: Model, authentication: Authentication): String {
         userService.addDefaultFields(model, authentication)
@@ -141,6 +131,16 @@ class RegularController(
     ): String {
         userService.addDefaultFields(model, authentication)
         return "regular/receiveBooking"
+    }
+
+    @GetMapping("/receive/confirm/{codeBase64}")
+    fun receiveBooking(@PathVariable codeBase64: String, authentication: Authentication): String {
+        val code = resolveCode(codeBase64)
+
+        val user = userService.fetchUser(authentication)
+        return resourceService.receiveResource(user, code)
+            .map { resource -> "redirect:/resource-received/${resource.id}" }
+            .orElse("redirect:/resource-received/0")
     }
 
     @GetMapping("/resource-received/{resourceId}")
@@ -172,10 +172,9 @@ class RegularController(
     @PostMapping("/testing")
     fun testingChangeRole(@RequestParam role: String, authentication: Authentication): String {
         if (!config.testingMode)
-            return "redirect:/testing"
+            return "redirect:/loggedin"
         userService.updateUserRole(authentication.asUser().entity.id, UserRole.valueOf(role))
         return "redirect:/testing"
     }
-
 
 }

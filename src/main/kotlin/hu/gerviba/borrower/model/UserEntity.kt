@@ -1,11 +1,12 @@
 package hu.gerviba.borrower.model
 
-import hu.gerviba.borrower.converter.StringListConverter
 import org.hibernate.Hibernate
 import javax.persistence.*
 
 @Entity
-@Table(name = "users")
+@Table(name = "users", indexes = [
+    Index(name = "idx_userentity_internalid_unq", columnList = "internalId", unique = true)
+])
 class UserEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -39,10 +40,6 @@ class UserEntity(
 
     @Column(nullable = false)
     var locked: Boolean = false,
-
-    @Column(nullable = false)
-    @Convert(converter = StringListConverter::class)
-    var permissions: MutableList<String> = mutableListOf(),
 
     @ManyToMany(cascade = [CascadeType.MERGE])
     @JoinTable

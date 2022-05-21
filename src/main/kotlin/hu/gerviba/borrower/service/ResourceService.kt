@@ -76,7 +76,7 @@ open class ResourceService(
     open fun updateResource(divisionId: Int, resource: ResourceEntity) {
         val resourceEntity = resourceRepository.getById(divisionId).apply {
             name = resource.name
-            code = resource.code // FIXME: might throw exception, unique
+            code = resource.code
             description = resource.description
             visible = resource.visible
             available = resource.available

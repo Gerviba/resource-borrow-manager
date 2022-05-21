@@ -67,7 +67,6 @@ open class UserService(
         userRepository.save(userRepository.getById(userId).apply {
             name = dto.name
             role = dto.role
-            permissions = dto.permissions
             locked = dto.locked
             updateRegularUserDetails(dto)
         })

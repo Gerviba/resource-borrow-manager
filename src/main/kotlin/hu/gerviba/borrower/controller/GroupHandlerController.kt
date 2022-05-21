@@ -23,6 +23,7 @@ class GroupHandlerController(
         return "regular/listRequests"
     }
 
+    @SuppressWarnings("kotlin:S1192")
     @GetMapping("/request/{requestId}")
     fun showRequest(model: Model, @PathVariable requestId: Int, authentication: Authentication): String {
         val user = userService.addDefaultFields(model, authentication)
@@ -36,6 +37,7 @@ class GroupHandlerController(
         return "regular/showBooking"
     }
 
+    @SuppressWarnings("kotlin:S1192")
     @PostMapping("/request/{requestId}/accept")
     fun acceptRequest(@PathVariable requestId: Int, authentication: Authentication): String {
         val user = userService.fetchUser(authentication)

@@ -2,6 +2,7 @@ package hu.gerviba.borrower.service
 
 import hu.gerviba.borrower.model.ResourceEntity
 import org.hibernate.search.mapper.orm.Search
+import org.slf4j.LoggerFactory
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.ApplicationListener
 import org.springframework.stereotype.Service
@@ -14,6 +15,8 @@ open class SearchService(
     private val entityManager: EntityManager
 ) : ApplicationListener<ApplicationReadyEvent> {
 
+    private val log = LoggerFactory.getLogger(javaClass)
+
     private val specialChars = Regex("[\"'~+\\-!|]")
 
     @Transactional(readOnly = true)
@@ -22,8 +25,10 @@ open class SearchService(
 
         val indexer = searchSession.massIndexer(ResourceEntity::class.java)
             .threadsToLoadObjects(7)
+        log.info("Indexer started on entity: ResourceEntity")
 
         indexer.startAndWait()
+        log.info("Indexer finished")
     }
 
     @Transactional(readOnly = true)
@@ -38,6 +43,8 @@ open class SearchService(
                 it.length < 8 -> "${it}~2"
                 else -> "${it}~3"
             }}
+
+        log.info("Searching with query: {} translated from: {}", queryString, query)
 
         return Search.session(entityManager)
             .search(ResourceEntity::class.java)

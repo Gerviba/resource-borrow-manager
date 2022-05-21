@@ -78,15 +78,15 @@ class TestingConfig(
         resourceRepository.save(res3)
         qrGenerator.generateForResource(res3)
 
-        val user1 = UserEntity(name = "User 1", email = "test@email.com", room = "SCH-1920", locked = false, teams = "teams.addr@ms.email.com", neptun = "BATMAN")
+        val user1 = UserEntity(name = "User 1", internalId = "1", email = "test@email.com", room = "SCH-1920", locked = false, teams = "teams.addr@ms.email.com", neptun = "BATMAN")
         user1.groups.add(group2)
         user1.divisions.add(div3)
         userRepository.save(user1)
 
-        val user2 = UserEntity(name = "User 2")
+        val user2 = UserEntity(name = "User 2", internalId = "2")
         userRepository.save(user2)
 
-        val user3 = UserEntity(name = "User 3")
+        val user3 = UserEntity(name = "User 3", internalId = "3")
         userRepository.save(user3)
 
         val book1 = BookingEntity(

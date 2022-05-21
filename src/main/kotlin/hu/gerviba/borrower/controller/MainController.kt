@@ -102,7 +102,7 @@ class MainController(
         val status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE)
         authentication?.let { userService.addDefaultFields(model, authentication) }
 
-        model.addAttribute("errorMessage", "ERROR ${status}")
+        model.addAttribute("errorMessage", "ERROR $status")
         model.addAttribute("errorDescription", request.getAttribute(RequestDispatcher.ERROR_MESSAGE))
 
         if (status != null) {

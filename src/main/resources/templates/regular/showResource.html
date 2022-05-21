@@ -70,7 +70,7 @@
 
                 <h2 th:if="${user != null && user.isRegular()}">Lehetőségek</h2>
                 <a href="#" th:if="${user != null && user.isRegular() && resource.available}" th:href="|@{/resource}/${resource.id}/request|" class="btn btn-secondary btn-large">Lefoglalás</a>
-                <a href="#" th:if="${user != null && user.isRegular()}" th:href="|@{/resource}/${resource.id}/history|" class="btn btn-secondary btn-large">Régbbi foglalások</a>
+                <a href="#" th:if="${user != null && user.isRegular()}" th:href="|@{/resource}/${resource.id}/history|" class="btn btn-secondary btn-large">Régebbi foglalások</a>
 
                 <h2 th:if="${user != null && user.isRegular()}">QR Kód</h2>
                 <table th:if="${user != null && user.isRegular()}">

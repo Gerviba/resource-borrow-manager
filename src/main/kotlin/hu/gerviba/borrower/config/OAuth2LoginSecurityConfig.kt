@@ -64,7 +64,11 @@ class OAuth2LoginSecurityConfig(
                 "/identify/**",
                 "/code/**",
                 "/login/**",
-                "/cdn/**"
+                "/cdn/**",
+                // PublicApiController
+                "/api/time",
+                "/api/health",
+                "/api/version"
             ).permitAll()
             /// REGULAR
             .antMatchers(
